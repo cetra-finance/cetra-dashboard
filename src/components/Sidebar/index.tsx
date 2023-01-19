@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useCallback } from "react";
 import {
     List,
     ListItem,
@@ -21,10 +21,11 @@ interface SidebarLink {
 
 interface SidebarProps {
     links: SidebarLink[];
+    onChangeLink?: (index: number, linkText: string) => void;
 }
 
-const Sidebar: FC<SidebarProps> = ({ links }) => {
-    const [activeIdx, setActiveIdx] = useState<number | null>();
+const Sidebar: FC<SidebarProps> = ({ links, onChangeLink }) => {
+    const [activeIdx, setActiveIdx] = useState<number>(0);
     // TODO: Refactor this shit
     const linksConverted: SidebarLink[] = [];
     links.forEach((link, index) => {
@@ -38,6 +39,14 @@ const Sidebar: FC<SidebarProps> = ({ links }) => {
 
         linksConverted.push(link);
     });
+
+    const handleOnChangeLink = useCallback(
+        (index: number, linkText: string) => {
+            if (onChangeLink) onChangeLink(index, linkText);
+            setActiveIdx(index);
+        },
+        [onChangeLink]
+    );
 
     return (
         <Center>
@@ -68,7 +77,9 @@ const Sidebar: FC<SidebarProps> = ({ links }) => {
                                             isLinkMain ? "bold" : "medium"
                                         }
                                         fontSize="22px"
-                                        onClick={() => setActiveIdx(index)}
+                                        onClick={() =>
+                                            handleOnChangeLink(index, linkText)
+                                        }
                                     >
                                         {linkText}
                                     </Link>

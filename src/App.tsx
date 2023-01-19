@@ -16,6 +16,7 @@ import TwitterSvg from "./assets/twitter.svg";
 import DiscordSvg from "./assets/discord.svg";
 import MediumSvg from "./assets/medium.svg";
 import CetraSvg from "./assets/cetra.svg";
+import { ChambersFarm } from "./views";
 
 const App: FC = () => {
     return (
@@ -35,6 +36,16 @@ const App: FC = () => {
                             </Box>
                             <Box mt="48px">
                                 <Sidebar
+                                    onChangeLink={(
+                                        index: number,
+                                        _linkText: string
+                                    ) => {
+                                        if (index === 3) {
+                                            window.open(
+                                                "https://cetra.gitbook.io/welcome/"
+                                            );
+                                        }
+                                    }}
                                     links={[
                                         {
                                             linkText: "Chamber`s farm",
@@ -56,7 +67,12 @@ const App: FC = () => {
                                 />
                             </Box>
                             <Center>
-                                <Box minW="280px" h="224px" bg="#7173FC">
+                                <Box
+                                    minW="280px"
+                                    h="224px"
+                                    bg="#7173FC"
+                                    roundedTop="md"
+                                >
                                     <Center h="100%">
                                         <SimpleGrid spacing="25px">
                                             <Center>
@@ -105,6 +121,8 @@ const App: FC = () => {
                                                         fontWeight="bold"
                                                         fontSize="26px"
                                                         color="white"
+                                                        href="https://cetra.gitbook.io/welcome/"
+                                                        isExternal
                                                     >
                                                         How it works
                                                     </Link>
@@ -114,6 +132,8 @@ const App: FC = () => {
                                                         fontWeight="bold"
                                                         fontSize="26px"
                                                         color="white"
+                                                        href="mailto:artemy@cetra.finance"
+                                                        isExternal
                                                     >
                                                         Contact us
                                                     </Link>
@@ -128,16 +148,29 @@ const App: FC = () => {
                             </Center>
                         </SimpleGrid>
                     </Box>
-                    <Box>
+                    <Box overflow="hidden">
                         <SimpleGrid
                             w="100%"
                             h="100%"
                             gridTemplateRows="80px 1fr"
                         >
-                            <Box borderBottom="1px" borderColor="#E8ECFD">
-                                Header
+                            <SimpleGrid
+                                borderBottom="1px"
+                                borderColor="#E8ECFD"
+                                alignItems="center"
+                            >
+                                <Text
+                                    color="#1F2040"
+                                    fontSize="22px"
+                                    fontWeight="bold"
+                                    pl="33px"
+                                >
+                                    Chamber`s farm
+                                </Text>
+                            </SimpleGrid>
+                            <Box p="10" overflowY="scroll">
+                                <ChambersFarm />
                             </Box>
-                            <Box>View</Box>
                         </SimpleGrid>
                     </Box>
                 </SimpleGrid>
