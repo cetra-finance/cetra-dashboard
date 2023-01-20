@@ -16,7 +16,11 @@ import TwitterSvg from "./assets/twitter.svg";
 import DiscordSvg from "./assets/discord.svg";
 import MediumSvg from "./assets/medium.svg";
 import CetraSvg from "./assets/cetra.svg";
-import { ChambersFarm } from "./views";
+import { ChambersFarm, DepositFarm } from "./views";
+import UniSvg from "./assets/icons/uni.svg";
+import AaveSvg from "./assets/icons/aave.svg";
+import UsdcSvg from "./assets/icons/usdc.svg";
+import EthSvg from "./assets/icons/eth.svg";
 
 const App: FC = () => {
     return (
@@ -169,7 +173,21 @@ const App: FC = () => {
                                 </Text>
                             </SimpleGrid>
                             <Box p="10" overflowY="scroll">
-                                <ChambersFarm />
+                                <DepositFarm
+                                    farmName="ETH-USDC"
+                                    baseFarmName="AAVE"
+                                    baseFarmIcon={AaveSvg}
+                                    quoteFarmName="UniV3"
+                                    quoteFarmIcon={UniSvg}
+                                    apy="65.23%"
+                                    tvl="$3.73M"
+                                    strategy="Delta-Neutral"
+                                    assetName="USDC"
+                                    assetIcon={UsdcSvg}
+                                    quoteAssetName="ETH"
+                                    quoteAssetIcon={EthSvg}
+                                    balance="341.15"
+                                />
                             </Box>
                         </SimpleGrid>
                     </Box>

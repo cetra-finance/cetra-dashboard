@@ -1,5 +1,6 @@
-import { SimpleGrid, Box, Text, Button, Image, Stack } from "@chakra-ui/react";
+import { SimpleGrid, Box, Text, Image, Stack } from "@chakra-ui/react";
 import { FC } from "react";
+import { CetraButton } from "../CetraButton";
 
 interface FarmListItemProps {
     poolName: string;
@@ -139,16 +140,9 @@ const FarmListItem: FC<FarmListItemProps> = ({
                     {strategy}
                 </Text>
             </Box>
-            <Button
-                bg="#7173FC"
-                color="#FFFFFF"
-                fontSize="16px"
-                fontWeight="bold"
-                w="80%"
-                h="32px"
-            >
+            <CetraButton w="80%" h="32px">
                 Deposit
-            </Button>
+            </CetraButton>
         </SimpleGrid>
     );
 };
