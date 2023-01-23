@@ -6,10 +6,12 @@ import UniIcon from "../../assets/icons/uni.svg";
 import EthIcon from "../../assets/icons/eth.svg";
 import UsdcIcon from "../../assets/icons/usdc.svg";
 
-const ChambersFarm: FC = () => {
+const Portfolio: FC = () => {
     return (
         <Box w="full" minH="90%">
-            <CetraList>
+            <CetraList
+                tabs={["Pool", "APY", "Total Position", "Farmed", "Strategy"]}
+            >
                 <CetraListItem
                     poolName="ETH-USDC"
                     baseAssetIcon={EthIcon}
@@ -19,15 +21,15 @@ const ChambersFarm: FC = () => {
                     quoteFarmIcon={UniIcon}
                     quoteFarmName="UniV3"
                     apy="36.22%"
-                    tvl="$8.05M"
-                    totalApr="Total APR: 31.17%"
-                    dailyApr="Daily APR: 0.07%"
+                    tvl="$12,412"
+                    totalApr="$145.21"
+                    dailyApr="12$ Since Yesterday"
                     strategy="Delta Neutral"
-                    actionText="Deposit"
+                    actionText="Withdraw"
                 />
             </CetraList>
         </Box>
     );
 };
 
-export { ChambersFarm };
+export { Portfolio };

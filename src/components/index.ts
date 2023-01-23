@@ -1,4 +1,4 @@
 export * from "./Sidebar";
-export * from "./FarmList";
-export * from "./FarmListItem";
+export * from "./CetraList";
+export * from "./CetraListItem";
 export * from "./CetraButton";

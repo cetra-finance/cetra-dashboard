@@ -2,7 +2,7 @@ import { SimpleGrid, Box, Text, Image, Stack } from "@chakra-ui/react";
 import { FC } from "react";
 import { CetraButton } from "../CetraButton";
 
-interface FarmListItemProps {
+interface CetraListItemProps {
     poolName: string;
     baseAssetIcon: string;
     quoteAssetIcon: string;
@@ -15,9 +15,10 @@ interface FarmListItemProps {
     totalApr: string;
     dailyApr: string;
     strategy: string;
+    actionText: string;
 }
 
-const FarmListItem: FC<FarmListItemProps> = ({
+const CetraListItem: FC<CetraListItemProps> = ({
     poolName,
     baseAssetIcon,
     quoteAssetIcon,
@@ -30,6 +31,7 @@ const FarmListItem: FC<FarmListItemProps> = ({
     totalApr,
     dailyApr,
     strategy,
+    actionText,
 }) => {
     return (
         <SimpleGrid
@@ -119,7 +121,7 @@ const FarmListItem: FC<FarmListItemProps> = ({
                     fontSize="10px"
                     fontWeight="medium"
                 >
-                    Total APR: {totalApr}
+                    {totalApr}
                 </Text>
                 <Text
                     align="center"
@@ -127,7 +129,7 @@ const FarmListItem: FC<FarmListItemProps> = ({
                     fontSize="10px"
                     fontWeight="medium"
                 >
-                    Daily APR: {dailyApr}
+                    {dailyApr}
                 </Text>
             </Box>
             <Box>
@@ -141,10 +143,10 @@ const FarmListItem: FC<FarmListItemProps> = ({
                 </Text>
             </Box>
             <CetraButton w="80%" h="32px">
-                Deposit
+                {actionText}
             </CetraButton>
         </SimpleGrid>
     );
 };
 
-export { FarmListItem, type FarmListItemProps };
+export { CetraListItem, type CetraListItemProps };

@@ -2,11 +2,12 @@ import { FC, useState, useCallback } from "react";
 import {
     List,
     ListItem,
-    Link,
+    Link as ChakraLink,
     Center,
     SimpleGrid,
     Box,
 } from "@chakra-ui/react";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 
 enum SidebarLinkType {
     Main,
@@ -16,16 +17,17 @@ enum SidebarLinkType {
 
 interface SidebarLink {
     linkText: string;
+    href?: string;
     linkType: SidebarLinkType;
 }
 
 interface SidebarProps {
     links: SidebarLink[];
-    onChangeLink?: (index: number, linkText: string) => void;
 }
 
-const Sidebar: FC<SidebarProps> = ({ links, onChangeLink }) => {
-    const [activeIdx, setActiveIdx] = useState<number>(0);
+const Sidebar: FC<SidebarProps> = ({ links }) => {
+    const location = useLocation();
+
     // TODO: Refactor this shit
     const linksConverted: SidebarLink[] = [];
     links.forEach((link, index) => {
@@ -40,18 +42,19 @@ const Sidebar: FC<SidebarProps> = ({ links, onChangeLink }) => {
         linksConverted.push(link);
     });
 
-    const handleOnChangeLink = useCallback(
-        (index: number, linkText: string) => {
-            if (onChangeLink) onChangeLink(index, linkText);
-            setActiveIdx(index);
-        },
-        [onChangeLink]
-    );
+    const actualIndex =
+        linksConverted.findIndex((value) => value.href === location.pathname) ??
+        0;
+    const [activeIdx, setActiveIdx] = useState<number>(actualIndex);
+
+    const handleOnClick = useCallback((index: number) => {
+        setActiveIdx(index);
+    }, []);
 
     return (
         <Center>
             <List fontSize="1.4rem" w="100%" spacing="43px">
-                {linksConverted.map(({ linkText, linkType }, index) => {
+                {linksConverted.map(({ linkText, linkType, href }, index) => {
                     const isLinkActive = activeIdx === index;
                     const isLinkMain = linkType === SidebarLinkType.Main;
                     const isLinkDivider = linkType === SidebarLinkType.Divider;
@@ -71,18 +74,32 @@ const Sidebar: FC<SidebarProps> = ({ links, onChangeLink }) => {
                                         bg="#8F8FFC"
                                         opacity={isLinkActive ? "1.0" : "0.0"}
                                     />
-                                    <Link
-                                        color="#1F2040"
-                                        fontWeight={
-                                            isLinkMain ? "bold" : "medium"
-                                        }
-                                        fontSize="22px"
-                                        onClick={() =>
-                                            handleOnChangeLink(index, linkText)
-                                        }
-                                    >
-                                        {linkText}
-                                    </Link>
+                                    {href?.includes("https://") ? (
+                                        <ChakraLink
+                                            color="#1F2040"
+                                            fontWeight={
+                                                isLinkMain ? "bold" : "medium"
+                                            }
+                                            fontSize="22px"
+                                            href={href}
+                                            isExternal
+                                        >
+                                            {linkText}
+                                        </ChakraLink>
+                                    ) : (
+                                        <ChakraLink
+                                            as={RouterLink}
+                                            color="#1F2040"
+                                            fontWeight={
+                                                isLinkMain ? "bold" : "medium"
+                                            }
+                                            fontSize="22px"
+                                            to={href ?? ""}
+                                            onClick={() => handleOnClick(index)}
+                                        >
+                                            {linkText}
+                                        </ChakraLink>
+                                    )}
                                 </SimpleGrid>
                             )}
                         </ListItem>

@@ -3,15 +3,16 @@ import { FC } from "react";
 
 const DEFAULT_TABS: string[] = ["Pool", "APY", "TVL", "Yield(APR)", "Strategy"];
 
-interface FarmListProps {
+interface CetraListProps {
+    tabs?: string[];
     children: JSX.Element[] | JSX.Element;
 }
 
-const FarmList: FC<FarmListProps> = ({ children }) => {
+const CetraList: FC<CetraListProps> = ({ children, tabs }) => {
     return (
         <Box w="full" h="full" shadow="lg" rounded="lg" p="20px">
             <SimpleGrid columns={6}>
-                {DEFAULT_TABS.map((tab: string, index: number) => (
+                {(tabs ?? DEFAULT_TABS).map((tab: string, index: number) => (
                     <Box key={index}>
                         <Text
                             align="center"
@@ -29,4 +30,4 @@ const FarmList: FC<FarmListProps> = ({ children }) => {
     );
 };
 
-export { FarmList, type FarmListProps };
+export { CetraList, type CetraListProps };

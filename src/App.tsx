@@ -11,12 +11,13 @@ import {
     Image,
     Link,
 } from "@chakra-ui/react";
+import { Routes, Route } from "react-router-dom";
 import { Sidebar, SidebarLinkType } from "./components";
 import TwitterSvg from "./assets/twitter.svg";
 import DiscordSvg from "./assets/discord.svg";
 import MediumSvg from "./assets/medium.svg";
 import CetraSvg from "./assets/cetra.svg";
-import { ChambersFarm, DepositFarm } from "./views";
+import { ChambersFarm, DepositFarm, Portfolio, Settings } from "./views";
 import UniSvg from "./assets/icons/uni.svg";
 import AaveSvg from "./assets/icons/aave.svg";
 import UsdcSvg from "./assets/icons/usdc.svg";
@@ -26,7 +27,7 @@ const App: FC = () => {
     return (
         <ChakraProvider>
             <Container maxW="100vw" maxH="100vh" p="0">
-                <SimpleGrid w="100vw" h="100vh" gridTemplateColumns="350px 1fr">
+                <SimpleGrid w="100vw" h="100vh" gridTemplateColumns="300px 1fr">
                     <Box borderRight="1px" borderColor="#E8ECFD">
                         <SimpleGrid
                             w="100%"
@@ -40,31 +41,25 @@ const App: FC = () => {
                             </Box>
                             <Box mt="48px">
                                 <Sidebar
-                                    onChangeLink={(
-                                        index: number,
-                                        _linkText: string
-                                    ) => {
-                                        if (index === 3) {
-                                            window.open(
-                                                "https://cetra.gitbook.io/welcome/"
-                                            );
-                                        }
-                                    }}
                                     links={[
                                         {
                                             linkText: "Chamber`s farm",
+                                            href: "/",
                                             linkType: SidebarLinkType.Main,
                                         },
                                         {
                                             linkText: "Portfolio",
+                                            href: "/portfolio",
                                             linkType: SidebarLinkType.Main,
                                         },
                                         {
                                             linkText: "Docs",
+                                            href: "https://cetra.gitbook.io/welcome/",
                                             linkType: SidebarLinkType.Sub,
                                         },
                                         {
                                             linkText: "Settings",
+                                            href: "/settings",
                                             linkType: SidebarLinkType.Sub,
                                         },
                                     ]}
@@ -72,17 +67,19 @@ const App: FC = () => {
                             </Box>
                             <Center>
                                 <Box
-                                    minW="280px"
-                                    h="224px"
+                                    minW="230px"
+                                    h="210px"
                                     bg="#7173FC"
                                     roundedTop="md"
                                 >
                                     <Center h="100%">
-                                        <SimpleGrid spacing="25px">
+                                        <SimpleGrid w="full" gap="30px">
                                             <Center>
                                                 <SimpleGrid
+                                                    w="full"
                                                     columns={3}
-                                                    spacing="30px"
+                                                    justifyContent="space-between"
+                                                    justifyItems="center"
                                                 >
                                                     <Box>
                                                         <Link
@@ -90,6 +87,8 @@ const App: FC = () => {
                                                             isExternal={true}
                                                         >
                                                             <Image
+                                                                w="35px"
+                                                                h="35px"
                                                                 src={TwitterSvg}
                                                                 color="white"
                                                             />
@@ -101,6 +100,8 @@ const App: FC = () => {
                                                             isExternal={true}
                                                         >
                                                             <Image
+                                                                w="35px"
+                                                                h="35px"
                                                                 src={DiscordSvg}
                                                                 color="white"
                                                             />
@@ -112,6 +113,8 @@ const App: FC = () => {
                                                             isExternal={true}
                                                         >
                                                             <Image
+                                                                w="35px"
+                                                                h="35px"
                                                                 src={MediumSvg}
                                                                 color="white"
                                                             />
@@ -119,11 +122,11 @@ const App: FC = () => {
                                                     </Box>
                                                 </SimpleGrid>
                                             </Center>
-                                            <List>
+                                            <List textAlign="center">
                                                 <ListItem>
                                                     <Link
                                                         fontWeight="bold"
-                                                        fontSize="26px"
+                                                        fontSize="22px"
                                                         color="white"
                                                         href="https://cetra.gitbook.io/welcome/"
                                                         isExternal
@@ -134,7 +137,7 @@ const App: FC = () => {
                                                 <ListItem>
                                                     <Link
                                                         fontWeight="bold"
-                                                        fontSize="26px"
+                                                        fontSize="22px"
                                                         color="white"
                                                         href="mailto:artemy@cetra.finance"
                                                         isExternal
@@ -143,7 +146,11 @@ const App: FC = () => {
                                                     </Link>
                                                 </ListItem>
                                             </List>
-                                            <Text fontSize="18px" color="white">
+                                            <Text
+                                                align="center"
+                                                fontSize="16px"
+                                                color="white"
+                                            >
                                                 Cetra Labs, 2023
                                             </Text>
                                         </SimpleGrid>
@@ -173,21 +180,37 @@ const App: FC = () => {
                                 </Text>
                             </SimpleGrid>
                             <Box p="10" overflowY="scroll">
-                                <DepositFarm
-                                    farmName="ETH-USDC"
-                                    baseFarmName="AAVE"
-                                    baseFarmIcon={AaveSvg}
-                                    quoteFarmName="UniV3"
-                                    quoteFarmIcon={UniSvg}
-                                    apy="65.23%"
-                                    tvl="$3.73M"
-                                    strategy="Delta-Neutral"
-                                    assetName="USDC"
-                                    assetIcon={UsdcSvg}
-                                    quoteAssetName="ETH"
-                                    quoteAssetIcon={EthSvg}
-                                    balance="341.15"
-                                />
+                                <Routes>
+                                    <Route
+                                        path="/"
+                                        element={<ChambersFarm />}
+                                    />
+                                    <Route
+                                        path="/portfolio"
+                                        element={
+                                            <Portfolio />
+                                            /* <DepositFarm
+                                                farmName="ETH-USDC"
+                                                baseFarmName="AAVE"
+                                                baseFarmIcon={AaveSvg}
+                                                quoteFarmName="UniV3"
+                                                quoteFarmIcon={UniSvg}
+                                                apy="65.23%"
+                                                tvl="$3.73M"
+                                                strategy="Delta-Neutral"
+                                                assetName="USDC"
+                                                assetIcon={UsdcSvg}
+                                                quoteAssetName="ETH"
+                                                quoteAssetIcon={EthSvg}
+                                                balance="341.15"
+                                            /> */
+                                        }
+                                    />
+                                    <Route
+                                        path="/settings"
+                                        element={<Settings />}
+                                    />
+                                </Routes>
                             </Box>
                         </SimpleGrid>
                     </Box>
