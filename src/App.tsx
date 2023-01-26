@@ -187,9 +187,16 @@ const App: FC = () => {
                                     />
                                     <Route
                                         path="/portfolio"
+                                        element={<Portfolio />}
+                                    />
+                                    <Route
+                                        path="/settings"
+                                        element={<Settings />}
+                                    />
+                                    <Route
+                                        path="/deposit"
                                         element={
-                                            <Portfolio />
-                                            /* <DepositFarm
+                                            <DepositFarm
                                                 farmName="ETH-USDC"
                                                 baseFarmName="AAVE"
                                                 baseFarmIcon={AaveSvg}
@@ -203,12 +210,8 @@ const App: FC = () => {
                                                 quoteAssetName="ETH"
                                                 quoteAssetIcon={EthSvg}
                                                 balance="341.15"
-                                            /> */
+                                            />
                                         }
-                                    />
-                                    <Route
-                                        path="/settings"
-                                        element={<Settings />}
                                     />
                                 </Routes>
                             </Box>
