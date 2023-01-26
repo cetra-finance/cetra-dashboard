@@ -16,6 +16,7 @@ interface CetraListItemProps {
     dailyApr: string;
     strategy: string;
     actionText: string;
+    onAction?: () => void;
 }
 
 const CetraListItem: FC<CetraListItemProps> = ({
@@ -32,6 +33,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
     dailyApr,
     strategy,
     actionText,
+    onAction,
 }) => {
     return (
         <SimpleGrid
@@ -142,7 +144,13 @@ const CetraListItem: FC<CetraListItemProps> = ({
                     {strategy}
                 </Text>
             </Box>
-            <CetraButton w="80%" h="32px">
+            <CetraButton
+                w="80%"
+                h="32px"
+                onClick={() => {
+                    if (onAction) onAction();
+                }}
+            >
                 {actionText}
             </CetraButton>
         </SimpleGrid>
