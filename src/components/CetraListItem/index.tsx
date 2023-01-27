@@ -2,6 +2,10 @@ import { SimpleGrid, Box, Text, Image, Stack } from "@chakra-ui/react";
 import { FC } from "react";
 import { CetraButton } from "../CetraButton";
 
+const LOGO_SIZE_SM: number = 22;
+const LOGO_SIZE_MD: number = 22;
+const LOGO_SIZE_LG: number = 27;
+
 interface CetraListItemProps {
     poolName: string;
     baseAssetIcon: string;
@@ -51,42 +55,81 @@ const CetraListItem: FC<CetraListItemProps> = ({
                     justifyItems="center"
                     alignItems="center"
                 >
-                    <Stack direction="row" spacing="-6px">
-                        <Image src={baseAssetIcon} w="27px" h="27px" />
-                        <Image src={quoteAssetIcon} w="27px" h="27px" />
+                    <Stack
+                        direction={["column", "column", "row"]}
+                        spacing="-6px"
+                    >
+                        <Image
+                            src={baseAssetIcon}
+                            w={[
+                                `${LOGO_SIZE_SM}px`,
+                                `${LOGO_SIZE_MD}px`,
+                                `${LOGO_SIZE_LG}px`,
+                            ]}
+                            h={[
+                                `${LOGO_SIZE_SM}px`,
+                                `${LOGO_SIZE_MD}px`,
+                                `${LOGO_SIZE_LG}px`,
+                            ]}
+                        />
+                        <Image
+                            src={quoteAssetIcon}
+                            w={[
+                                `${LOGO_SIZE_SM}px`,
+                                `${LOGO_SIZE_MD}px`,
+                                `${LOGO_SIZE_LG}px`,
+                            ]}
+                            h={[
+                                `${LOGO_SIZE_SM}px`,
+                                `${LOGO_SIZE_MD}px`,
+                                `${LOGO_SIZE_LG}px`,
+                            ]}
+                        />
                     </Stack>
                     <SimpleGrid justifyItems="center" alignItems="center">
                         <Box borderBottom="1px" borderColor="#E8ECFD">
                             <Text
                                 align="center"
                                 color="#1F2040"
-                                fontSize="16px"
+                                fontSize={["10px", "10px", "16px"]}
                                 fontWeight="bold"
                             >
                                 {poolName}
                             </Text>
                         </Box>
                         <Box>
-                            <Stack direction="row" spacing="2px">
-                                <Image src={baseFarmIcon} w="12px" h="12px" />
+                            <Stack
+                                direction="row"
+                                spacing="2px"
+                                alignItems="center"
+                            >
+                                <Image
+                                    src={baseFarmIcon}
+                                    w={["8px", "8px", "12px"]}
+                                    h={["8px", "8px", "12px"]}
+                                />
                                 <Text
                                     color="#1F2040"
-                                    fontSize="10px"
+                                    fontSize={["6px", "6px", "10px"]}
                                     fontWeight="medium"
                                 >
                                     {baseFarmName}
                                 </Text>
                                 <Text
                                     color="#E8ECFD"
-                                    fontSize="10px"
+                                    fontSize={["6px", "6px", "10px"]}
                                     fontWeight="medium"
                                 >
                                     /
                                 </Text>
-                                <Image src={quoteFarmIcon} w="12px" h="12px" />
+                                <Image
+                                    src={quoteFarmIcon}
+                                    w={["8px", "8px", "12px"]}
+                                    h={["8px", "8px", "12px"]}
+                                />
                                 <Text
                                     color="#1F2040"
-                                    fontSize="10px"
+                                    fontSize={["6px", "6px", "10px"]}
                                     fontWeight="medium"
                                 >
                                     {quoteFarmName}
@@ -100,7 +143,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                 <Text
                     align="center"
                     color="#5555FF"
-                    fontSize="20px"
+                    fontSize={["14px", "14px", "20px"]}
                     fontWeight="bold"
                 >
                     {apy}
@@ -110,7 +153,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                 <Text
                     align="center"
                     color="#1F2040"
-                    fontSize="16px"
+                    fontSize={["12px", "12px", "16px"]}
                     fontWeight="bold"
                 >
                     {tvl}
@@ -120,7 +163,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                 <Text
                     align="center"
                     color="#1F2040"
-                    fontSize="10px"
+                    fontSize={["8px", "8px", "10px"]}
                     fontWeight="medium"
                 >
                     {totalApr}
@@ -128,7 +171,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                 <Text
                     align="center"
                     color="#1F2040"
-                    fontSize="10px"
+                    fontSize={["8px", "8px", "10px"]}
                     fontWeight="medium"
                 >
                     {dailyApr}
@@ -138,7 +181,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                 <Text
                     align="center"
                     color="#1F2040"
-                    fontSize="14px"
+                    fontSize={["10px", "10px", "14px"]}
                     fontWeight="bold"
                 >
                     {strategy}

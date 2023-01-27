@@ -9,6 +9,10 @@ import {
 } from "@chakra-ui/react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
+const FONT_SIZE_SM: number = 18;
+const FONT_SIZE_MD: number = 18;
+const FONT_SIZE_LG: number = 22;
+
 enum SidebarLinkType {
     Main,
     Sub,
@@ -53,7 +57,7 @@ const Sidebar: FC<SidebarProps> = ({ links }) => {
 
     return (
         <Center>
-            <List fontSize="1.4rem" w="100%" spacing="43px">
+            <List w="100%" spacing={["20px", "20px", "32px"]}>
                 {linksConverted.map(({ linkText, linkType, href }, index) => {
                     const isLinkActive = activeIdx === index;
                     const isLinkMain = linkType === SidebarLinkType.Main;
@@ -80,7 +84,11 @@ const Sidebar: FC<SidebarProps> = ({ links }) => {
                                             fontWeight={
                                                 isLinkMain ? "bold" : "medium"
                                             }
-                                            fontSize="22px"
+                                            fontSize={[
+                                                `${FONT_SIZE_SM}px`,
+                                                `${FONT_SIZE_MD}px`,
+                                                `${FONT_SIZE_LG}px`,
+                                            ]}
                                             href={href}
                                             isExternal
                                         >
@@ -93,7 +101,11 @@ const Sidebar: FC<SidebarProps> = ({ links }) => {
                                             fontWeight={
                                                 isLinkMain ? "bold" : "medium"
                                             }
-                                            fontSize="22px"
+                                            fontSize={[
+                                                `${FONT_SIZE_SM}px`,
+                                                `${FONT_SIZE_MD}px`,
+                                                `${FONT_SIZE_LG}px`,
+                                            ]}
                                             to={href ?? ""}
                                             onClick={() => handleOnClick(index)}
                                         >
