@@ -41,45 +41,51 @@ const CetraInfoCard: FC = () => {
             pb={[`${PT_PB_SM}px`, `${PT_PB_MD}px`, `${PT_PB_LG}px`]}
         >
             <Stack direction="row" spacing="auto">
-                <Image
-                    w={[
-                        `${LOGO_SIZE_SM}px`,
-                        `${LOGO_SIZE_MD}px`,
-                        `${LOGO_SIZE_LG}px`,
-                    ]}
-                    h={[
-                        `${LOGO_SIZE_SM}px`,
-                        `${LOGO_SIZE_MD}px`,
-                        `${LOGO_SIZE_LG}px`,
-                    ]}
-                    src={TwitterLogo}
-                />
-                <Image
-                    w={[
-                        `${LOGO_SIZE_SM}px`,
-                        `${LOGO_SIZE_MD}px`,
-                        `${LOGO_SIZE_LG}px`,
-                    ]}
-                    h={[
-                        `${LOGO_SIZE_SM}px`,
-                        `${LOGO_SIZE_MD}px`,
-                        `${LOGO_SIZE_LG}px`,
-                    ]}
-                    src={DiscordLogo}
-                />
-                <Image
-                    w={[
-                        `${LOGO_SIZE_SM}px`,
-                        `${LOGO_SIZE_MD}px`,
-                        `${LOGO_SIZE_LG}px`,
-                    ]}
-                    h={[
-                        `${LOGO_SIZE_SM}px`,
-                        `${LOGO_SIZE_MD}px`,
-                        `${LOGO_SIZE_LG}px`,
-                    ]}
-                    src={MediumLogo}
-                />
+                <Link href="https://twitter.com/CetraFinance" isExternal>
+                    <Image
+                        w={[
+                            `${LOGO_SIZE_SM}px`,
+                            `${LOGO_SIZE_MD}px`,
+                            `${LOGO_SIZE_LG}px`,
+                        ]}
+                        h={[
+                            `${LOGO_SIZE_SM}px`,
+                            `${LOGO_SIZE_MD}px`,
+                            `${LOGO_SIZE_LG}px`,
+                        ]}
+                        src={TwitterLogo}
+                    />
+                </Link>
+                <Link href="https://discord.gg/22WBP95dKF" isExternal>
+                    <Image
+                        w={[
+                            `${LOGO_SIZE_SM}px`,
+                            `${LOGO_SIZE_MD}px`,
+                            `${LOGO_SIZE_LG}px`,
+                        ]}
+                        h={[
+                            `${LOGO_SIZE_SM}px`,
+                            `${LOGO_SIZE_MD}px`,
+                            `${LOGO_SIZE_LG}px`,
+                        ]}
+                        src={DiscordLogo}
+                    />
+                </Link>
+                <Link href="https://medium.com/@cetrafinance" isExternal>
+                    <Image
+                        w={[
+                            `${LOGO_SIZE_SM}px`,
+                            `${LOGO_SIZE_MD}px`,
+                            `${LOGO_SIZE_LG}px`,
+                        ]}
+                        h={[
+                            `${LOGO_SIZE_SM}px`,
+                            `${LOGO_SIZE_MD}px`,
+                            `${LOGO_SIZE_LG}px`,
+                        ]}
+                        src={MediumLogo}
+                    />
+                </Link>
             </Stack>
             <Stack spacing="4px">
                 <Link

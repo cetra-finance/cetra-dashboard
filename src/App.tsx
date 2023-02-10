@@ -114,12 +114,12 @@ const App: FC = () => {
                                     fontFamily="Chakra Petch"
                                     fontSize="22px"
                                     fontWeight="bold"
-                                    pl="33px"
+                                    pl="8"
                                 >
                                     {activePageTitle}
                                 </Text>
                             </SimpleGrid>
-                            <Box p={["0px", "0px", "20px"]} overflowY="scroll">
+                            <Box p={["0px", "0px", "8"]} overflowY="auto">
                                 <Routes>
                                     <Route
                                         path="/"
