@@ -26,6 +26,7 @@ const CetraButton: FC<CetraButtonProps> = ({
         <Button
             bg="#7173FC"
             color="#FFFFFF"
+            fontFamily="Chakra Petch"
             fontWeight={fontWeight ?? "bold"}
             fontSize={fontSize ?? ["12px", "12px", "16px"]}
             onClick={handleOnClick}

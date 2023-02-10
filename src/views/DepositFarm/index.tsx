@@ -54,6 +54,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                     <Stack direction="row" alignItems="center">
                         <Text
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize="20px"
                             fontWeight="bold"
                             pr="12px"
@@ -68,13 +69,18 @@ const DepositFarm: FC<DepositFarmProps> = ({
                         />
                         <Text
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize="14px"
                             fontWeight="medium"
                             opacity="0.7"
                         >
                             {baseFarmName}
                         </Text>
-                        <Text color="#E8ECFD" opacity="0.7">
+                        <Text
+                            color="#E8ECFD"
+                            fontFamily="Chakra Petch"
+                            opacity="0.7"
+                        >
                             /
                         </Text>
                         <Image
@@ -85,6 +91,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                         />
                         <Text
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize="14px"
                             fontWeight="medium"
                             opacity="0.7"
@@ -98,10 +105,20 @@ const DepositFarm: FC<DepositFarmProps> = ({
                         justifyContent="flex-end"
                         spacing="28px"
                     >
-                        <Text color="#5555FF" fontSize="20px" fontWeight="bold">
+                        <Text
+                            color="#5555FF"
+                            fontFamily="Chakra Petch"
+                            fontSize="20px"
+                            fontWeight="bold"
+                        >
                             APY: {apy}
                         </Text>
-                        <Text color="#1F2040" fontSize="20px" fontWeight="bold">
+                        <Text
+                            color="#1F2040"
+                            fontFamily="Chakra Petch"
+                            fontSize="20px"
+                            fontWeight="bold"
+                        >
                             TVL: {tvl}
                         </Text>
                         <Box
@@ -115,6 +132,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                         >
                             <Text
                                 color="#1F2040"
+                                fontFamily="Chakra Petch"
                                 fontSize="20px"
                                 fontWeight="bold"
                             >
@@ -127,6 +145,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                     <Stack direction="row">
                         <Text
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize="14px"
                             fontWeight="medium"
                         >
@@ -134,6 +153,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                         </Text>
                         <Text
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize="14px"
                             fontWeight="light"
                             decoration="underline"
@@ -157,12 +177,14 @@ const DepositFarm: FC<DepositFarmProps> = ({
                             variant="unstyled"
                             type="number"
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize="20px"
                             fontWeight="medium"
                         />
                         <Button
                             variant="unstyled"
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize="16px"
                             fontWeight="medium"
                         >
@@ -196,7 +218,12 @@ const DepositFarm: FC<DepositFarmProps> = ({
                     pb="3px"
                     justifyContent="space-between"
                 >
-                    <Text color="#1F2040" fontSize="18px" fontWeight="medium">
+                    <Text
+                        color="#1F2040"
+                        fontFamily="Chakra Petch"
+                        fontSize="18px"
+                        fontWeight="medium"
+                    >
                         Assets Supplied
                     </Text>
                     <Stack direction="row" spacing="7px">
@@ -208,6 +235,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                             <Image src={assetIcon} w="15px" h="15px" />
                             <Text
                                 color="#1F2040"
+                                fontFamily="Chakra Petch"
                                 fontSize="18px"
                                 fontWeight="medium"
                             >
@@ -216,6 +244,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                         </Stack>
                         <Text
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize="18px"
                             fontWeight="medium"
                         >
@@ -229,6 +258,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                             <Image src={quoteAssetIcon} w="15px" h="15px" />
                             <Text
                                 color="#1F2040"
+                                fontFamily="Chakra Petch"
                                 fontSize="18px"
                                 fontWeight="medium"
                             >
@@ -244,7 +274,12 @@ const DepositFarm: FC<DepositFarmProps> = ({
                     pb="3px"
                     justifyContent="space-between"
                 >
-                    <Text color="#1F2040" fontSize="18px" fontWeight="medium">
+                    <Text
+                        color="#1F2040"
+                        fontFamily="Chakra Petch"
+                        fontSize="18px"
+                        fontWeight="medium"
+                    >
                         Assets Borrowed
                     </Text>
                     <Stack direction="row" spacing="7px">
@@ -256,6 +291,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                             <Image src={assetIcon} w="15px" h="15px" />
                             <Text
                                 color="#1F2040"
+                                fontFamily="Chakra Petch"
                                 fontSize="18px"
                                 fontWeight="medium"
                             >
@@ -264,6 +300,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                         </Stack>
                         <Text
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize="18px"
                             fontWeight="medium"
                         >
@@ -277,6 +314,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                             <Image src={quoteAssetIcon} w="15px" h="15px" />
                             <Text
                                 color="#1F2040"
+                                fontFamily="Chakra Petch"
                                 fontSize="18px"
                                 fontWeight="medium"
                             >
@@ -292,7 +330,12 @@ const DepositFarm: FC<DepositFarmProps> = ({
                     pb="3px"
                     justifyContent="space-between"
                 >
-                    <Text color="#1F2040" fontSize="18px" fontWeight="medium">
+                    <Text
+                        color="#1F2040"
+                        fontFamily="Chakra Petch"
+                        fontSize="18px"
+                        fontWeight="medium"
+                    >
                         Total Assets in Position Value
                     </Text>
                     <Stack direction="row" spacing="7px">
@@ -304,6 +347,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                             <Image src={assetIcon} w="15px" h="15px" />
                             <Text
                                 color="#1F2040"
+                                fontFamily="Chakra Petch"
                                 fontSize="18px"
                                 fontWeight="medium"
                             >
@@ -312,6 +356,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                         </Stack>
                         <Text
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize="18px"
                             fontWeight="medium"
                         >
@@ -325,6 +370,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                             <Image src={quoteAssetIcon} w="15px" h="15px" />
                             <Text
                                 color="#1F2040"
+                                fontFamily="Chakra Petch"
                                 fontSize="18px"
                                 fontWeight="medium"
                             >
@@ -340,7 +386,12 @@ const DepositFarm: FC<DepositFarmProps> = ({
                     pb="3px"
                     justifyContent="space-between"
                 >
-                    <Text color="#1F2040" fontSize="18px" fontWeight="medium">
+                    <Text
+                        color="#1F2040"
+                        fontFamily="Chakra Petch"
+                        fontSize="18px"
+                        fontWeight="medium"
+                    >
                         Amount to Swap
                     </Text>
                     <Stack direction="row" spacing="30px">
@@ -352,6 +403,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                             <Image src={quoteAssetIcon} w="15px" h="15px" />
                             <Text
                                 color="#1F2040"
+                                fontFamily="Chakra Petch"
                                 fontSize="18px"
                                 fontWeight="medium"
                             >
@@ -366,6 +418,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
                             <Image src={assetIcon} w="15px" h="15px" />
                             <Text
                                 color="#1F2040"
+                                fontFamily="Chakra Petch"
                                 fontSize="18px"
                                 fontWeight="medium"
                             >
@@ -381,10 +434,20 @@ const DepositFarm: FC<DepositFarmProps> = ({
                     pb="3px"
                     justifyContent="space-between"
                 >
-                    <Text color="#1F2040" fontSize="18px" fontWeight="medium">
+                    <Text
+                        color="#1F2040"
+                        fontFamily="Chakra Petch"
+                        fontSize="18px"
+                        fontWeight="medium"
+                    >
                         Net Exposure:
                     </Text>
-                    <Text color="#63637A" fontSize="18px" fontWeight="medium">
+                    <Text
+                        color="#63637A"
+                        fontFamily="Chakra Petch"
+                        fontSize="18px"
+                        fontWeight="medium"
+                    >
                         Long 145.99 {assetName}
                     </Text>
                 </Stack>
@@ -395,10 +458,22 @@ const DepositFarm: FC<DepositFarmProps> = ({
                     pb="3px"
                     justifyContent="space-between"
                 >
-                    <Text color="#1F2040" fontSize="18px" fontWeight="medium">
+                    <Text
+                        color="#1F2040"
+                        fontFamily="Chakra Petch"
+                        fontSize="18px"
+                        fontWeight="medium"
+                    >
                         Share of Pool()
                     </Text>
-                    <Text>0%</Text>
+                    <Text
+                        color="#63637A"
+                        fontFamily="Chakra Petch"
+                        fontSize="18px"
+                        fontWeight="medium"
+                    >
+                        0%
+                    </Text>
                 </Stack>
             </SimpleGrid>
         </SimpleGrid>

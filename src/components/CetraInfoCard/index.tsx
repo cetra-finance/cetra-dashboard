@@ -84,6 +84,7 @@ const CetraInfoCard: FC = () => {
             <Stack spacing="4px">
                 <Link
                     color="#FFF"
+                    fontFamily="Chakra Petch"
                     fontSize={[
                         `${FONT_SIZE_SM}px`,
                         `${FONT_SIZE_MD}px`,
@@ -97,6 +98,7 @@ const CetraInfoCard: FC = () => {
                 </Link>
                 <Link
                     color="#FFF"
+                    fontFamily="Chakra Petch"
                     fontSize={[
                         `${FONT_SIZE_SM}px`,
                         `${FONT_SIZE_MD}px`,
@@ -111,6 +113,7 @@ const CetraInfoCard: FC = () => {
             </Stack>
             <Text
                 color="#FFF"
+                fontFamily="Chakra Petch"
                 fontSize={[
                     `${SUB_FONT_SIZE_SM}px`,
                     `${SUB_FONT_SIZE_MD}px`,

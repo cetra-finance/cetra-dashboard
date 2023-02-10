@@ -81,6 +81,7 @@ const Sidebar: FC<SidebarProps> = ({ links }) => {
                                     {href?.includes("https://") ? (
                                         <ChakraLink
                                             color="#1F2040"
+                                            fontFamily="Chakra Petch"
                                             fontWeight={
                                                 isLinkMain ? "bold" : "medium"
                                             }
@@ -98,6 +99,7 @@ const Sidebar: FC<SidebarProps> = ({ links }) => {
                                         <ChakraLink
                                             as={RouterLink}
                                             color="#1F2040"
+                                            fontFamily="Chakra Petch"
                                             fontWeight={
                                                 isLinkMain ? "bold" : "medium"
                                             }

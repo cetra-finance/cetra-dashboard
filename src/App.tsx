@@ -92,6 +92,7 @@ const App: FC = () => {
                             >
                                 <Text
                                     color="#1F2040"
+                                    fontFamily="Chakra Petch"
                                     fontSize="22px"
                                     fontWeight="bold"
                                     pl="33px"

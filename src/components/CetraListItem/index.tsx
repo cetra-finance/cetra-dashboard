@@ -91,6 +91,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                             <Text
                                 align="center"
                                 color="#1F2040"
+                                fontFamily="Chakra Petch"
                                 fontSize={["10px", "10px", "16px"]}
                                 fontWeight="bold"
                             >
@@ -110,6 +111,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                                 />
                                 <Text
                                     color="#1F2040"
+                                    fontFamily="Chakra Petch"
                                     fontSize={["6px", "6px", "10px"]}
                                     fontWeight="medium"
                                 >
@@ -117,6 +119,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                                 </Text>
                                 <Text
                                     color="#E8ECFD"
+                                    fontFamily="Chakra Petch"
                                     fontSize={["6px", "6px", "10px"]}
                                     fontWeight="medium"
                                 >
@@ -129,6 +132,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                                 />
                                 <Text
                                     color="#1F2040"
+                                    fontFamily="Chakra Petch"
                                     fontSize={["6px", "6px", "10px"]}
                                     fontWeight="medium"
                                 >
@@ -143,6 +147,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                 <Text
                     align="center"
                     color="#5555FF"
+                    fontFamily="Chakra Petch"
                     fontSize={["14px", "14px", "20px"]}
                     fontWeight="bold"
                 >
@@ -153,6 +158,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                 <Text
                     align="center"
                     color="#1F2040"
+                    fontFamily="Chakra Petch"
                     fontSize={["12px", "12px", "16px"]}
                     fontWeight="bold"
                 >
@@ -163,6 +169,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                 <Text
                     align="center"
                     color="#1F2040"
+                    fontFamily="Chakra Petch"
                     fontSize={["8px", "8px", "10px"]}
                     fontWeight="medium"
                 >
@@ -171,6 +178,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                 <Text
                     align="center"
                     color="#1F2040"
+                    fontFamily="Chakra Petch"
                     fontSize={["8px", "8px", "10px"]}
                     fontWeight="medium"
                 >
@@ -181,6 +189,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
                 <Text
                     align="center"
                     color="#1F2040"
+                    fontFamily="Chakra Petch"
                     fontSize={["10px", "10px", "14px"]}
                     fontWeight="bold"
                 >

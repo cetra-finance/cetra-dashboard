@@ -31,6 +31,7 @@ const CetraList: FC<CetraListProps> = ({ children, tabs }) => {
                         <Text
                             align="center"
                             color="#1F2040"
+                            fontFamily="Chakra Petch"
                             fontSize={[
                                 `${FONT_SIZE_SM}px`,
                                 `${FONT_SIZE_MD}px`,
