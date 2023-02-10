@@ -209,7 +209,7 @@ const DepositFarm: FC<DepositFarmProps> = ({
             </SimpleGrid>
             <SimpleGrid
                 w="562px"
-                shadow="lg"
+                boxShadow="0px 0px 38px 5px #0000000D"
                 pl="20px"
                 pr="20px"
                 pt="30px"

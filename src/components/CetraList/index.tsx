@@ -21,7 +21,7 @@ const CetraList: FC<CetraListProps> = ({ children, tabs }) => {
         <Box
             w="full"
             h="full"
-            shadow="lg"
+            boxShadow="0px 0px 38px 5px #0000000D"
             rounded="lg"
             p={[`${P_SM}px`, `${P_MD}px`, `${P_LG}px`]}
         >
