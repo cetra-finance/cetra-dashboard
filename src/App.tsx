@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
     ChakraProvider,
     SimpleGrid,
@@ -7,8 +7,13 @@ import {
     Text,
     Image,
 } from "@chakra-ui/react";
-import { Routes, Route } from "react-router-dom";
-import { Sidebar, SidebarLinkType, CetraInfoCard } from "./components";
+import { Routes, Route, useLocation } from "react-router-dom";
+import {
+    Sidebar,
+    SidebarLinkType,
+    CetraInfoCard,
+    SidebarLink,
+} from "./components";
 import CetraSvg from "./assets/cetra.svg";
 import { ChambersFarm, DepositFarm, Portfolio, Settings } from "./views";
 import UniLogo from "./assets/icons/uni.svg";
@@ -16,7 +21,39 @@ import AaveLogo from "./assets/icons/aave.svg";
 import UsdcLogo from "./assets/icons/usdc.svg";
 import EthLogo from "./assets/icons/eth.svg";
 
+const DEFAULT_SIDEBAR_LINKS: SidebarLink[] = [
+    {
+        linkText: "Chamber`s farm",
+        href: "/",
+        linkType: SidebarLinkType.Main,
+    },
+    {
+        linkText: "Portfolio",
+        href: "/portfolio",
+        linkType: SidebarLinkType.Main,
+    },
+    {
+        linkText: "Docs",
+        href: "https://cetra.gitbook.io/welcome/",
+        linkType: SidebarLinkType.Sub,
+    },
+    {
+        linkText: "Settings",
+        href: "/settings",
+        linkType: SidebarLinkType.Sub,
+    },
+];
+
 const App: FC = () => {
+    const location = useLocation();
+    let actualPageTitleIndex = DEFAULT_SIDEBAR_LINKS.findIndex(
+        (value) => value.href === location.pathname
+    );
+    if (actualPageTitleIndex === -1) actualPageTitleIndex = 0;
+    const [activePageTitle, setActivePageTitle] = useState(
+        DEFAULT_SIDEBAR_LINKS[actualPageTitleIndex].linkText
+    );
+
     return (
         <ChakraProvider>
             <Container maxW="100vw" maxH="100vh" p="0">
@@ -47,28 +84,10 @@ const App: FC = () => {
                             </SimpleGrid>
                             <Box mt="48px">
                                 <Sidebar
-                                    links={[
-                                        {
-                                            linkText: "Chamber`s farm",
-                                            href: "/",
-                                            linkType: SidebarLinkType.Main,
-                                        },
-                                        {
-                                            linkText: "Portfolio",
-                                            href: "/portfolio",
-                                            linkType: SidebarLinkType.Main,
-                                        },
-                                        {
-                                            linkText: "Docs",
-                                            href: "https://cetra.gitbook.io/welcome/",
-                                            linkType: SidebarLinkType.Sub,
-                                        },
-                                        {
-                                            linkText: "Settings",
-                                            href: "/settings",
-                                            linkType: SidebarLinkType.Sub,
-                                        },
-                                    ]}
+                                    links={DEFAULT_SIDEBAR_LINKS}
+                                    onClickLink={(linkText: string) =>
+                                        setActivePageTitle(linkText)
+                                    }
                                 />
                             </Box>
                             <Box
@@ -97,7 +116,7 @@ const App: FC = () => {
                                     fontWeight="bold"
                                     pl="33px"
                                 >
-                                    Chamber`s farm
+                                    {activePageTitle}
                                 </Text>
                             </SimpleGrid>
                             <Box p={["0px", "0px", "20px"]} overflowY="scroll">
@@ -131,6 +150,11 @@ const App: FC = () => {
                                                 quoteAssetName="ETH"
                                                 quoteAssetIcon={EthLogo}
                                                 balance="341.15"
+                                                onLoaded={(farmName) =>
+                                                    setActivePageTitle(
+                                                        `Chamber\`s farm / ${farmName}`
+                                                    )
+                                                }
                                             />
                                         }
                                     />

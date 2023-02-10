@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { FC, useCallback, useEffect } from "react";
 import {
     Box,
     Text,
@@ -25,6 +25,7 @@ interface DepositFarmProps {
     quoteAssetIcon: string;
     balance: string;
     onClickFarm?: () => void;
+    onLoaded?: (farmName: string) => void;
 }
 
 const DepositFarm: FC<DepositFarmProps> = ({
@@ -42,10 +43,15 @@ const DepositFarm: FC<DepositFarmProps> = ({
     quoteAssetIcon,
     balance,
     onClickFarm,
+    onLoaded,
 }) => {
     const handleOnClick = useCallback(() => {
         if (onClickFarm) onClickFarm();
     }, [onClickFarm]);
+
+    useEffect(() => {
+        if (onLoaded) onLoaded(farmName);
+    }, [farmName]);
 
     return (
         <SimpleGrid gap="56px">

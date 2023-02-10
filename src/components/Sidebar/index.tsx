@@ -27,9 +27,10 @@ interface SidebarLink {
 
 interface SidebarProps {
     links: SidebarLink[];
+    onClickLink?: (linkText: string) => void;
 }
 
-const Sidebar: FC<SidebarProps> = ({ links }) => {
+const Sidebar: FC<SidebarProps> = ({ links, onClickLink }) => {
     const location = useLocation();
 
     // TODO: Refactor this shit
@@ -46,13 +47,16 @@ const Sidebar: FC<SidebarProps> = ({ links }) => {
         linksConverted.push(link);
     });
 
-    const actualIndex =
-        linksConverted.findIndex((value) => value.href === location.pathname) ??
-        0;
+    let actualIndex = linksConverted.findIndex(
+        (value) => value.href === location.pathname
+    );
+    if (actualIndex === -1) actualIndex = 0;
+
     const [activeIdx, setActiveIdx] = useState<number>(actualIndex);
 
-    const handleOnClick = useCallback((index: number) => {
+    const handleOnClick = useCallback((linkText: string, index: number) => {
         setActiveIdx(index);
+        if (onClickLink) onClickLink(linkText);
     }, []);
 
     return (
@@ -109,7 +113,9 @@ const Sidebar: FC<SidebarProps> = ({ links }) => {
                                                 `${FONT_SIZE_LG}px`,
                                             ]}
                                             to={href ?? ""}
-                                            onClick={() => handleOnClick(index)}
+                                            onClick={() =>
+                                                handleOnClick(linkText, index)
+                                            }
                                         >
                                             {linkText}
                                         </ChakraLink>
