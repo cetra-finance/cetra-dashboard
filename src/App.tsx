@@ -6,7 +6,9 @@ import {
     Box,
     Text,
     Image,
+    Button,
 } from "@chakra-ui/react";
+import { useConnect, useAccount, useDisconnect } from "wagmi";
 import { Routes, Route, useLocation } from "react-router-dom";
 import {
     Sidebar,
@@ -20,6 +22,7 @@ import UniLogo from "./assets/icons/uni.svg";
 import AaveLogo from "./assets/icons/aave.svg";
 import UsdcLogo from "./assets/icons/usdc.svg";
 import EthLogo from "./assets/icons/eth.svg";
+import { getTruncatedAddress } from "./utils";
 
 const DEFAULT_SIDEBAR_LINKS: SidebarLink[] = [
     {
@@ -53,6 +56,12 @@ const App: FC = () => {
     const [activePageTitle, setActivePageTitle] = useState(
         DEFAULT_SIDEBAR_LINKS[actualPageTitleIndex].linkText
     );
+
+    const { connect, connectors, error, isLoading, pendingConnector } =
+        useConnect();
+    const metaMaskConnector = connectors[0];
+    const { address, connector, isConnected } = useAccount();
+    const { disconnect } = useDisconnect();
 
     return (
         <ChakraProvider>
@@ -108,16 +117,42 @@ const App: FC = () => {
                                 borderBottom="1px"
                                 borderColor="#E8ECFD"
                                 alignItems="center"
+                                columns={2}
+                                pl="8"
+                                pr="8"
                             >
                                 <Text
                                     color="#1F2040"
                                     fontFamily="Chakra Petch"
                                     fontSize="22px"
                                     fontWeight="bold"
-                                    pl="8"
                                 >
                                     {activePageTitle}
                                 </Text>
+                                <Button
+                                    isLoading={isLoading}
+                                    w="200px"
+                                    color="#7173FC"
+                                    fontFamily="Chakra Petch"
+                                    fontWeight="bold"
+                                    border="1px"
+                                    borderColor="#7173FC"
+                                    bgColor="transparent"
+                                    justifySelf="end"
+                                    onClick={() => {
+                                        if (!isConnected) {
+                                            connect({
+                                                connector: metaMaskConnector,
+                                            });
+                                        } else {
+                                            disconnect();
+                                        }
+                                    }}
+                                >
+                                    {isConnected
+                                        ? getTruncatedAddress(address!)
+                                        : "Connect Wallet"}
+                                </Button>
                             </SimpleGrid>
                             <Box p={["0px", "0px", "8"]} overflowY="auto">
                                 <Routes>
