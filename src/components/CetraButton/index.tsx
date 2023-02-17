@@ -1,5 +1,5 @@
 import { FC, useCallback } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, SystemStyleObject } from "@chakra-ui/react";
 
 interface CetraButtonProps {
     children: JSX.Element | string;
@@ -7,6 +7,14 @@ interface CetraButtonProps {
     fontSize?: string;
     w?: string;
     h?: string;
+    border?: string;
+    borderColor?: string;
+    bgColor?: string;
+    color?: string;
+    _hover?: SystemStyleObject;
+    _active?: SystemStyleObject;
+    isDisabled?: boolean;
+    isLoading?: boolean;
     onClick?: () => void;
 }
 
@@ -16,6 +24,14 @@ const CetraButton: FC<CetraButtonProps> = ({
     fontSize,
     w,
     h,
+    border,
+    borderColor,
+    bgColor,
+    color,
+    _hover,
+    _active,
+    isDisabled,
+    isLoading,
     onClick,
 }) => {
     const handleOnClick = useCallback(() => {
@@ -24,26 +40,34 @@ const CetraButton: FC<CetraButtonProps> = ({
 
     return (
         <Button
-            bg="#7173FC"
-            color="#FFFFFF"
+            bg={bgColor ?? "#7173FC"}
+            color={color ?? "#FFFFFF"}
             fontFamily="Chakra Petch"
             fontWeight={fontWeight ?? "bold"}
             fontSize={fontSize ?? ["12px", "12px", "16px"]}
             onClick={handleOnClick}
+            isDisabled={isDisabled}
+            isLoading={isLoading}
             w={w ?? "full"}
             h={h ?? "full"}
-            _hover={{
-                bg: "#FFFFFF",
-                color: "#7173FC",
-                border: "1px",
-                borderColor: "#7173FC",
-            }}
-            _active={{
-                bg: "#FFFFFF",
-                color: "#7173FC",
-                border: "1px",
-                borderColor: "#7173FC",
-            }}
+            border={border}
+            borderColor={borderColor}
+            _hover={
+                _hover ?? {
+                    bg: "#FFFFFF",
+                    color: "#7173FC",
+                    border: "1px",
+                    borderColor: "#7173FC",
+                }
+            }
+            _active={
+                _active ?? {
+                    bg: "#FFFFFF",
+                    color: "#7173FC",
+                    border: "1px",
+                    borderColor: "#7173FC",
+                }
+            }
         >
             {children}
         </Button>

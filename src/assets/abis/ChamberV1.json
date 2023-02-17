@@ -61,9 +61,54 @@
         "type": "error"
     },
     {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_currentLTV",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_totalShares",
+                "type": "uint256"
+            }
+        ],
+        "name": "ChamberV1__UpkeepNotNeeded",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ChamberV1__UserRepaidMoreEthThanOwned",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ChamberV1__UserRepaidMoreMaticThanOwned",
+        "type": "error"
+    },
+    {
         "inputs": [],
         "name": "ChamberV1__sharesWorthMoreThenDep",
         "type": "error"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "previousOwner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
     },
     {
         "inputs": [
@@ -84,13 +129,37 @@
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "amount0Current",
+                "name": "",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "amount1Current",
+                "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes",
+                "name": "",
+                "type": "bytes"
+            }
+        ],
+        "name": "checkUpkeep",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "upkeepNeeded",
+                "type": "bool"
+            },
+            {
+                "internalType": "bytes",
+                "name": "",
+                "type": "bytes"
             }
         ],
         "stateMutability": "view",
@@ -137,12 +206,12 @@
     },
     {
         "inputs": [],
-        "name": "getPositionLiquidity",
+        "name": "getSqrtRatioX96",
         "outputs": [
             {
-                "internalType": "uint128",
+                "internalType": "uint160",
                 "name": "",
-                "type": "uint128"
+                "type": "uint160"
             }
         ],
         "stateMutability": "view",
@@ -259,7 +328,33 @@
     },
     {
         "inputs": [],
-        "name": "rebalance",
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes",
+                "name": "",
+                "type": "bytes"
+            }
+        ],
+        "name": "performUpkeep",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "renounceOwnership",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -312,6 +407,11 @@
                 "internalType": "uint256",
                 "name": "_maxLTV",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_hedgeDev",
+                "type": "uint256"
             }
         ],
         "name": "setLTV",
@@ -336,6 +436,19 @@
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {

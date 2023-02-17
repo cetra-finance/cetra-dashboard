@@ -17,11 +17,11 @@ import {
     SidebarLink,
 } from "./components";
 import CetraSvg from "./assets/cetra.svg";
-import { ChambersFarm, DepositFarm, Portfolio, Settings } from "./views";
+import { ChambersFarm, Farm, Portfolio, Settings } from "./views";
 import UniLogo from "./assets/icons/uni.svg";
 import AaveLogo from "./assets/icons/aave.svg";
 import UsdcLogo from "./assets/icons/usdc.svg";
-import EthLogo from "./assets/icons/eth.svg";
+import MaticLogo from "./assets/icons/matic.svg";
 import { getTruncatedAddress } from "./utils";
 
 const DEFAULT_SIDEBAR_LINKS: SidebarLink[] = [
@@ -57,6 +57,7 @@ const App: FC = () => {
         DEFAULT_SIDEBAR_LINKS[actualPageTitleIndex].linkText
     );
 
+    // TODO: Add error handler
     const { connect, connectors, error, isLoading, pendingConnector } =
         useConnect();
     const metaMaskConnector = connectors[0];
@@ -156,8 +157,9 @@ const App: FC = () => {
                             </SimpleGrid>
                             <Box p={["0px", "0px", "8"]} overflowY="auto">
                                 <Routes>
+                                    <Route index element={<ChambersFarm />} />
                                     <Route
-                                        path="/"
+                                        path="*"
                                         element={<ChambersFarm />}
                                     />
                                     <Route
@@ -169,22 +171,9 @@ const App: FC = () => {
                                         element={<Settings />}
                                     />
                                     <Route
-                                        path="/deposit"
+                                        path="/farm"
                                         element={
-                                            <DepositFarm
-                                                farmName="ETH-USDC"
-                                                baseFarmName="AAVE"
-                                                baseFarmIcon={AaveLogo}
-                                                quoteFarmName="UniV3"
-                                                quoteFarmIcon={UniLogo}
-                                                apy="65.23%"
-                                                tvl="$3.73M"
-                                                strategy="Delta-Neutral"
-                                                assetName="USDC"
-                                                assetIcon={UsdcLogo}
-                                                quoteAssetName="ETH"
-                                                quoteAssetIcon={EthLogo}
-                                                balance="341.15"
+                                            <Farm
                                                 onLoaded={(farmName) =>
                                                     setActivePageTitle(
                                                         `Chamber\`s farm / ${farmName}`

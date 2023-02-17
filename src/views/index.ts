@@ -1,4 +1,4 @@
 export * from "./ChambersFarm";
-export * from "./DepositFarm";
+export * from "./Farm";
 export * from "./Settings";
 export * from "./Portfolio";
