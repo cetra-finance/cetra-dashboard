@@ -97,6 +97,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         functionName: "allowance",
         args: [address!, state.address],
         enabled: isConnected,
+        watch: true,
     });
 
     // Prepare USDC approve call
@@ -153,7 +154,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
 
     // Get total shares amount
     const {
-        data: totalSharesAmount,
+        data: totalSharesAmountResult,
         isError: isTotalSharesError,
         isLoading: isTotalSharesLoading,
     } = useContractRead({
@@ -163,10 +164,13 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         watch: true,
         enabled: isConnected,
     });
+    const totalSharesAmount: BigNumber = totalSharesAmountResult
+        ? (totalSharesAmountResult as BigNumber)
+        : BigNumber.from(0);
 
     // Get current usd amount
     const {
-        data: currentUsdAmount,
+        data: currentUsdAmountResult,
         isError: isCurrentUsdError,
         isLoading: isCurrentUsdLoading,
     } = useContractRead({
@@ -176,6 +180,9 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         watch: true,
         enabled: isConnected,
     });
+    const currentUsdAmount: BigNumber = currentUsdAmountResult
+        ? (currentUsdAmountResult as BigNumber)
+        : BigNumber.from(0);
 
     // Get user shares amount
     const {
@@ -210,14 +217,12 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
     });
 
     // Prepare burn(withdraw) call
-    const burnAmount = (
-        currentUsdAmount ? (currentUsdAmount as BigNumber).isZero() : true
-    )
+    const burnAmount = currentUsdAmount.isZero()
         ? BigNumber.from("0")
         : BigNumber.from(denormalizedInputAmount)
               .mul(1e6)
-              .div(currentUsdAmount as BigNumber)
-              .mul(totalSharesAmount as BigNumber)
+              .div(currentUsdAmount)
+              .mul(totalSharesAmount)
               .div(1e6);
     const isWithdrawAvailable =
         isConnected &&
@@ -286,9 +291,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
     const tvl = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-    }).format(
-        currentUsdAmount ? (currentUsdAmount as BigNumber).toNumber() / 1e6 : 0
-    );
+    }).format(currentUsdAmount.toNumber() / 1e6);
 
     const balance = balanceData?.formatted ?? "0.0";
 
