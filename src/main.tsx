@@ -1,23 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { Chain, localhost } from "wagmi/chains";
+import { Chain, localhost, polygon } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
+import { IS_PROD } from "./utils";
 
-// TODO: Remove chain from prod
-const cetraLocalhost: Chain = {
+const cetraDevLocalhost: Chain = {
     ...localhost,
     id: 31337,
 };
 
-// TODO: Change to actual chains
-const { chains, provider, webSocketProvider } = configureChains(
-    [cetraLocalhost],
-    [publicProvider()]
-);
+const defaultChains = IS_PROD ? [polygon] : [cetraDevLocalhost];
+
+const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
+    publicProvider(),
+]);
 
 const client = createClient({
     autoConnect: true,

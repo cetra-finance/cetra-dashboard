@@ -1,6 +1,8 @@
 import BN from "bn.js";
 import { Address } from "wagmi";
 
+export const IS_PROD: boolean = import.meta.env.VITE_PROD;
+
 export const USDC_ADDRESS: Address =
     "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
 

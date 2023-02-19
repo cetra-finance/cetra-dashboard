@@ -111,6 +111,13 @@
         "type": "event"
     },
     {
+        "inputs": [],
+        "name": "_redeemFees",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -206,12 +213,17 @@
     },
     {
         "inputs": [],
-        "name": "getSqrtRatioX96",
+        "name": "getAdminBalance",
         "outputs": [
             {
-                "internalType": "uint160",
+                "internalType": "uint256",
                 "name": "",
-                "type": "uint160"
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
