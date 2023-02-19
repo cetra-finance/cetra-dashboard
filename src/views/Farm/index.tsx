@@ -283,8 +283,12 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
     console.log(`totalSharesAmount: ${totalSharesAmount}`);
     console.log(`currentUsdAmount: ${currentUsdAmount}`); */
 
-    // TODO: Calculate TVL
-    const tvl = "$8.05M";
+    const tvl = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    }).format(
+        currentUsdAmount ? (currentUsdAmount as BigNumber).toNumber() / 1e6 : 0
+    );
 
     const balance = balanceData?.formatted ?? "0.0";
 

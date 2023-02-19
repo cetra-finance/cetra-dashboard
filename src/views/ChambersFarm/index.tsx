@@ -1,13 +1,36 @@
 import { FC } from "react";
 import { Box } from "@chakra-ui/react";
-import { CetraList, CetraListItem } from "../../components";
 import { useNavigate } from "react-router-dom";
+import { useContractRead, useAccount } from "wagmi";
+import { BigNumber } from "ethers";
+import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
 import { POOLS } from "../../pools";
+import { CetraList, CetraListItem } from "../../components";
 
 const ChambersFarm: FC = () => {
     const navigate = useNavigate();
 
-    // TODO: Calculate TVL
+    const { address, isConnected } = useAccount();
+
+    // TODO: Fetch all pools
+    const pool = POOLS[0];
+
+    // Get current usd amount
+    const {
+        data: currentUsdAmountResult,
+        isError: isCurrentUsdError,
+        isLoading: isCurrentUsdLoading,
+    } = useContractRead({
+        address: pool.address,
+        abi: ChamberV1ABI,
+        functionName: "currentUSDBalance",
+        watch: true,
+        enabled: isConnected,
+    });
+    const currentUsdAmount: BigNumber = currentUsdAmountResult
+        ? (currentUsdAmountResult as BigNumber)
+        : BigNumber.from(0);
+
     return (
         <Box w="full" minH="90%">
             <CetraList>
@@ -22,7 +45,10 @@ const ChambersFarm: FC = () => {
                         quoteFarmIcon={pool.quoteFarmIcon}
                         quoteFarmName={pool.quoteFarmName}
                         apy="--%"
-                        tvl="$8.05M"
+                        tvl={new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                        }).format(currentUsdAmount.toNumber() / 1e6)}
                         totalApr="Total APR: --%"
                         dailyApr="Daily APR: --%"
                         strategy={pool.strategy}
