@@ -1,28 +1,38 @@
 import { FC, useState } from "react";
 import {
     ChakraProvider,
-    SimpleGrid,
-    Container,
     Box,
     Text,
     Image,
+    SimpleGrid,
+    Stack,
     Button,
+    Container,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
 } from "@chakra-ui/react";
-import { useConnect, useAccount, useDisconnect } from "wagmi";
+import {
+    useConnect,
+    useAccount,
+    useDisconnect,
+    useSwitchNetwork,
+    useNetwork,
+} from "wagmi";
 import { Routes, Route, useLocation } from "react-router-dom";
 import {
     Sidebar,
     SidebarLinkType,
     CetraInfoCard,
     SidebarLink,
+    CetraButton,
 } from "./components";
-import CetraSvg from "./assets/cetra.svg";
 import { ChambersFarm, Farm, Portfolio, Settings } from "./views";
-import UniLogo from "./assets/icons/uni.svg";
-import AaveLogo from "./assets/icons/aave.svg";
-import UsdcLogo from "./assets/icons/usdc.svg";
-import MaticLogo from "./assets/icons/matic.svg";
-import { getTruncatedAddress } from "./utils";
+import { getTruncatedAddress, defaultChains } from "./utils";
+import CetraSvg from "./assets/cetra.svg";
 
 const DEFAULT_SIDEBAR_LINKS: SidebarLink[] = [
     {
@@ -57,6 +67,12 @@ const App: FC = () => {
         DEFAULT_SIDEBAR_LINKS[actualPageTitleIndex].linkText
     );
 
+    const {
+        isOpen: isSwitchNetworkModalOpen,
+        onOpen: onSwitchNetworkModalOpen,
+        onClose: onSwitchNetworkModalClose,
+    } = useDisclosure();
+
     // TODO: Add error handler
     const { connect, connectors, error, isLoading, pendingConnector } =
         useConnect();
@@ -64,8 +80,60 @@ const App: FC = () => {
     const { address, connector, isConnected } = useAccount();
     const { disconnect } = useDisconnect();
 
+    const { chain } = useNetwork();
+    // TODO: Add all supported chains
+    const chainId = defaultChains[0].id;
+    const {
+        chains: switchNetworkChains,
+        error: switchNetworkError,
+        isLoading: isSwitchNetworkLoading,
+        pendingChainId,
+        switchNetwork,
+    } = useSwitchNetwork({ chainId });
+    const isSwitchNetworkNeeded = chain ? chain.id !== chainId : false;
+
     return (
         <ChakraProvider>
+            <Modal
+                onClose={onSwitchNetworkModalClose}
+                isOpen={isSwitchNetworkModalOpen || isSwitchNetworkNeeded}
+                isCentered
+            >
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader
+                        color="#1F2040"
+                        fontFamily="Chakra Petch"
+                        fontWeight="bold"
+                        fontSize="22px"
+                    >
+                        Wrong Network!
+                    </ModalHeader>
+                    <ModalBody>
+                        <Stack direction="row" justify="center" spacing={10}>
+                            <Stack direction="column" spacing={5}>
+                                <Text
+                                    color="#4A4C76"
+                                    fontFamily="Chakra Petch"
+                                    fontWeight="medium"
+                                    fontSize="14px"
+                                >
+                                    Sorry, but we are not deployed here yet.
+                                    Please, switch your network to one of
+                                    supported
+                                </Text>
+                                <CetraButton
+                                    h="8"
+                                    onClick={() => switchNetwork?.()}
+                                    isLoading={isSwitchNetworkLoading}
+                                >
+                                    Switch Network
+                                </CetraButton>
+                            </Stack>
+                        </Stack>
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
             <Container maxW="100vw" maxH="100vh" p="0">
                 <SimpleGrid
                     w="100vw"

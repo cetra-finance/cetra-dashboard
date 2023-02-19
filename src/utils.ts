@@ -1,7 +1,15 @@
 import BN from "bn.js";
+import { Chain, localhost, polygon } from "wagmi/chains";
 import { Address } from "wagmi";
 
-export const IS_PROD: boolean = import.meta.env.VITE_PROD;
+export const IS_PROD: boolean = import.meta.env.VITE_PROD === "true";
+
+export const cetraDevLocalhost: Chain = {
+    ...localhost,
+    id: 31337,
+};
+
+export const defaultChains = IS_PROD === true ? [polygon] : [cetraDevLocalhost];
 
 export const USDC_ADDRESS: Address =
     "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
