@@ -28,6 +28,7 @@ import { useLocation } from "react-router-dom";
 import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
 import CetraBuzzLogo from "../../assets/cetra-buzz.svg";
 import CetraMoneyBagLogo from "../../assets/cetra-money-bag.svg";
+import CetraAttentionLogo from "../../assets/cetra-attention.svg";
 import { CetraButton } from "../../components";
 import { Pool } from "../../pools";
 import { denormalizeAmount, USDC_ADDRESS } from "../../utils";
@@ -433,6 +434,28 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
             </Modal>
             <SimpleGrid gap="56px">
                 <SimpleGrid gap="22px">
+                    <Box
+                        border="1px"
+                        borderColor="#1F2040"
+                        borderRadius="5px"
+                        pt="2"
+                        pb="2"
+                        pl="3.5"
+                        pr="3.5"
+                    >
+                        <Stack direction="row" spacing={3.5} align="center">
+                            <Image src={CetraAttentionLogo} w="6" h="6" />
+                            <Text
+                                color="#1F2040"
+                                fontSize="22px"
+                                fontWeight="bold"
+                                fontFamily="Chakra Petch"
+                            >
+                                Vaults are not audited yet. Use at your own
+                                risk.
+                            </Text>
+                        </Stack>
+                    </Box>
                     <SimpleGrid columns={2} justifyContent="space-evenly">
                         <Stack direction="row" alignItems="center">
                             <Text
