@@ -30,13 +30,13 @@ import {
     SidebarLink,
     CetraButton,
 } from "./components";
-import { ChambersFarm, Farm, Portfolio, Settings } from "./views";
+import { Strategies, Farm, Portfolio, Settings } from "./views";
 import { getTruncatedAddress, defaultChains } from "./utils";
 import CetraSvg from "./assets/cetra.svg";
 
 const DEFAULT_SIDEBAR_LINKS: SidebarLink[] = [
     {
-        linkText: "Chamber`s farm",
+        linkText: "Strategies",
         href: "/",
         linkType: SidebarLinkType.Main,
     },
@@ -225,11 +225,8 @@ const App: FC = () => {
                             </SimpleGrid>
                             <Box p={["0px", "0px", "8"]} overflowY="auto">
                                 <Routes>
-                                    <Route index element={<ChambersFarm />} />
-                                    <Route
-                                        path="*"
-                                        element={<ChambersFarm />}
-                                    />
+                                    <Route index element={<Strategies />} />
+                                    <Route path="*" element={<Strategies />} />
                                     <Route
                                         path="/portfolio"
                                         element={<Portfolio />}
@@ -244,7 +241,7 @@ const App: FC = () => {
                                             <Farm
                                                 onLoaded={(farmName) =>
                                                     setActivePageTitle(
-                                                        `Chamber\`s farm / ${farmName}`
+                                                        `Strategies / ${farmName}`
                                                     )
                                                 }
                                             />

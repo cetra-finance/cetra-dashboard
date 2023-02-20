@@ -7,7 +7,7 @@ import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
 import { POOLS } from "../../pools";
 import { CetraList, CetraListItem } from "../../components";
 
-const ChambersFarm: FC = () => {
+const Strategies: FC = () => {
     const navigate = useNavigate();
 
     const { address, isConnected } = useAccount();
@@ -65,4 +65,4 @@ const ChambersFarm: FC = () => {
     );
 };
 
-export { ChambersFarm };
+export { Strategies };
