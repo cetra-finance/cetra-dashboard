@@ -72,7 +72,9 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
 
     const [inputAmount, setInputAmount] = useState("0.0");
     const denormalizedInputAmount = BigNumber.from(
-        denormalizeAmount(inputAmount).toString()
+        denormalizeAmount(
+            inputAmount.length === 0 ? "0.0" : inputAmount
+        ).toString()
     );
 
     // Connect user wallet
@@ -601,9 +603,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                                 value={inputAmount}
                                 onChange={(event) => {
                                     const value = event.target.value;
-                                    setInputAmount(
-                                        value.length === 0 ? "0.0" : value
-                                    );
+                                    setInputAmount(value);
                                 }}
                             />
                             <Button
