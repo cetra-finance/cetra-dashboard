@@ -394,7 +394,6 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
 
     const balance = balanceData?.formatted ?? "0.0";
 
-    // TODO: Calculate card info
     const cardInfo: CardInfo = {
         assetsInPool: [
             calcAssetsInPool[0].toFixed(6),
@@ -405,7 +404,19 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
             calcAssetsBorrowed[1].toFixed(6),
         ],
         assetsSupplied: normalizedInputAmount.toString(),
-        netExp: `${calcNetExp[0].toFixed(3)}, ${calcNetExp[1].toFixed(3)}`,
+        netExp: `${
+            calcNetExp[0].toDecimalPlaces(6).isZero()
+                ? "Neutral"
+                : calcNetExp[0].toDecimalPlaces(6).isPositive()
+                ? "Long " + calcNetExp[0].toFixed(6)
+                : "Short " + calcNetExp[0].toFixed(6)
+        } ${state.baseAssetName}, ${
+            calcNetExp[1].toDecimalPlaces(6).isZero()
+                ? "Neutral"
+                : calcNetExp[1].toDecimalPlaces(6).isPositive()
+                ? "Long " + calcNetExp[1].toFixed(6)
+                : "Short " + calcNetExp[1].toFixed(6)
+        } ${state.quoteAssetName}`,
         shareOfPool: calcShareOfPool.mul(100).greaterThanOrEqualTo(100)
             ? ">=100"
             : calcShareOfPool.mul(100).toFixed(3),
@@ -981,7 +992,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                             fontSize="18px"
                             fontWeight="medium"
                         >
-                            Long {cardInfo.netExp} {state.baseAssetName}
+                            {cardInfo.netExp}
                         </Text>
                     </Stack>
                     <Stack
