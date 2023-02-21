@@ -25,6 +25,7 @@ import {
 import { erc20ABI } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 import { useLocation } from "react-router-dom";
+import Decimal from "decimal.js";
 import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
 import CetraBuzzLogo from "../../assets/cetra-buzz.svg";
 import CetraMoneyBagLogo from "../../assets/cetra-money-bag.svg";
@@ -34,11 +35,10 @@ import { Pool } from "../../pools";
 import { denormalizeAmount, USDC_ADDRESS } from "../../utils";
 
 interface CardInfo {
-    assetsSupplied: string[];
+    assetsInPool: string[];
     assetsBorrowed: string[];
-    totalAssetsInPositionValue: string[];
-    amountToSwap: string[];
-    netExposure: string;
+    assetsSupplied: string;
+    netExp: string;
     shareOfPool: string;
 }
 
@@ -187,6 +187,58 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         ? (currentUsdAmountResult as BigNumber)
         : BigNumber.from(0);
 
+    // Get current pool reserves
+    const {
+        data: currentPoolReservesResult,
+        isError: isCurrentPoolReservesError,
+        isLoading: isCurrentPoolReservesLoading,
+    } = useContractRead({
+        address: state.address,
+        abi: ChamberV1ABI,
+        functionName: "calculateCurrentPoolReserves",
+        watch: true,
+        enabled: isConnected,
+    });
+    const currentPoolReserves: BigNumber[] = currentPoolReservesResult
+        ? (currentPoolReservesResult as BigNumber[])
+        : [BigNumber.from(0), BigNumber.from(0)];
+
+    // Get VWMatic token balance
+    const {
+        data: vWmaticTokenBalanceResult,
+        isError: isVwmaticTokenBalanceError,
+        isLoading: isVwmaticTokenBalanceLoading,
+    } = useContractRead({
+        address: state.address,
+        abi: ChamberV1ABI,
+        functionName: "getVWMATICTokenBalance",
+        watch: true,
+        enabled: isConnected,
+    });
+    const vWmaticTokenBalance: Decimal = vWmaticTokenBalanceResult
+        ? new Decimal((vWmaticTokenBalanceResult as BigNumber).toString()).div(
+              1e18
+          )
+        : new Decimal(0);
+
+    // Get VWETH token balance
+    const {
+        data: vWethTokenBalanceResult,
+        isError: isVwethTokenBalanceError,
+        isLoading: isVwethTokenBalanceLoading,
+    } = useContractRead({
+        address: state.address,
+        abi: ChamberV1ABI,
+        functionName: "getVWETHTokenBalance",
+        watch: true,
+        enabled: isConnected,
+    });
+    const vWethTokenBalance: Decimal = vWethTokenBalanceResult
+        ? new Decimal((vWethTokenBalanceResult as BigNumber).toString()).div(
+              1e18
+          )
+        : new Decimal(0);
+
     // Get user shares amount
     const {
         data: userSharesAmount,
@@ -260,19 +312,63 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
 
     const handleOnClickDeposit = useCallback(() => {
         writeDeposit?.();
-        // setInputAmount("0.0");
     }, [depositConfig]);
     const handleOnClickApprove = useCallback(() => {
         writeApprove?.();
-        // setInputAmount("0.0");
     }, [approveConfig]);
     const handleOnClickWithdraw = useCallback(() => {
         writeWithdraw?.();
-        // setInputAmount("0.0");
     }, [withdrawConfig]);
     const handleOnClickMax = useCallback(() => {
         setInputAmount(balanceData?.formatted ?? "0.0");
     }, [balanceData]);
+
+    const normalizedInputAmount: Decimal = new Decimal(
+        denormalizedInputAmount.toString()
+    ).div(1e6);
+
+    const normalizedTotalSharesAmount: Decimal = new Decimal(
+        totalSharesAmount.toString()
+    ).div(1e6);
+
+    const normalizedCurrentUsdAmount: Decimal = new Decimal(
+        currentUsdAmount.toString()
+    ).div(1e6);
+
+    const calcUserSharesAmount: Decimal = totalSharesAmount.isZero()
+        ? normalizedInputAmount
+        : normalizedInputAmount
+              .div(normalizedCurrentUsdAmount)
+              .mul(normalizedTotalSharesAmount);
+
+    const calcShareOfPool: Decimal = totalSharesAmount.isZero()
+        ? new Decimal(1.0)
+        : calcUserSharesAmount.div(normalizedTotalSharesAmount);
+
+    const calcAssetsInPool: Decimal[] = [
+        // WETH
+        new Decimal(currentPoolReserves[1].toString())
+            .div(new Decimal(1e18))
+            .mul(calcShareOfPool),
+        // WMATIC
+        new Decimal(currentPoolReserves[0].toString())
+            .div(new Decimal(1e18))
+            .mul(calcShareOfPool),
+    ];
+
+    const calcAssetsBorrowed: Decimal[] = [
+        // WETH
+        vWethTokenBalance.mul(calcShareOfPool),
+        // WMATIC
+        vWmaticTokenBalance.mul(calcShareOfPool),
+    ];
+
+    const calcNetExp: Decimal[] = [
+        // WETH
+        calcAssetsInPool[0].sub(calcAssetsBorrowed[0]),
+        // WMATIC
+        calcAssetsInPool[1].sub(calcAssetsBorrowed[1]),
+    ];
 
     /* console.log("==================");
     console.log(`isApproveLoading: ${isApproveLoading}`);
@@ -294,18 +390,25 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
     const tvl = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-    }).format(currentUsdAmount.toNumber() / 1e6);
+    }).format(normalizedCurrentUsdAmount.toNumber());
 
     const balance = balanceData?.formatted ?? "0.0";
 
     // TODO: Calculate card info
     const cardInfo: CardInfo = {
-        assetsSupplied: ["50", "3.71"],
-        assetsBorrowed: ["50", "3.71"],
-        totalAssetsInPositionValue: ["50", "3.71"],
-        amountToSwap: ["1", "2"],
-        netExposure: "145.99",
-        shareOfPool: "0",
+        assetsInPool: [
+            calcAssetsInPool[0].toFixed(6),
+            calcAssetsInPool[1].toFixed(6),
+        ],
+        assetsBorrowed: [
+            calcAssetsBorrowed[0].toFixed(6),
+            calcAssetsBorrowed[1].toFixed(6),
+        ],
+        assetsSupplied: normalizedInputAmount.toString(),
+        netExp: `${calcNetExp[0].toFixed(3)}, ${calcNetExp[1].toFixed(3)}`,
+        shareOfPool: calcShareOfPool.mul(100).greaterThanOrEqualTo(100)
+            ? ">=100"
+            : calcShareOfPool.mul(100).toFixed(3),
     };
 
     return (
@@ -702,7 +805,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                             fontSize="18px"
                             fontWeight="medium"
                         >
-                            Assets Supplied
+                            Assets in pool
                         </Text>
                         <Stack direction="row" spacing="7px">
                             <Stack
@@ -721,7 +824,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                                     fontSize="18px"
                                     fontWeight="medium"
                                 >
-                                    {cardInfo.assetsSupplied[0]}{" "}
+                                    {cardInfo.assetsInPool[0]}{" "}
                                     {state.baseAssetName}
                                 </Text>
                             </Stack>
@@ -749,7 +852,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                                     fontSize="18px"
                                     fontWeight="medium"
                                 >
-                                    {cardInfo.assetsSupplied[1]}{" "}
+                                    {cardInfo.assetsInPool[1]}{" "}
                                     {state.quoteAssetName}
                                 </Text>
                             </Stack>
@@ -834,115 +937,27 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                             fontSize="18px"
                             fontWeight="medium"
                         >
-                            Total Assets in Position Value
+                            Assets Supplied
                         </Text>
-                        <Stack direction="row" spacing="7px">
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing="5px"
-                            >
-                                <Image
-                                    src={state.baseAssetIcon}
-                                    w="15px"
-                                    h="15px"
-                                />
-                                <Text
-                                    color="#1F2040"
-                                    fontFamily="Chakra Petch"
-                                    fontSize="18px"
-                                    fontWeight="medium"
-                                >
-                                    {cardInfo.totalAssetsInPositionValue[0]}{" "}
-                                    {state.baseAssetName}
-                                </Text>
-                            </Stack>
+                        <Stack
+                            direction="row"
+                            spacing="5px"
+                            alignItems="center"
+                        >
+                            <Image
+                                src={state.depositAssetIcon}
+                                w="15px"
+                                h="15px"
+                            />
                             <Text
                                 color="#1F2040"
                                 fontFamily="Chakra Petch"
                                 fontSize="18px"
                                 fontWeight="medium"
                             >
-                                +
+                                {cardInfo.assetsSupplied}{" "}
+                                {state.depositAssetName}
                             </Text>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing="5px"
-                            >
-                                <Image
-                                    src={state.quoteAssetIcon}
-                                    w="15px"
-                                    h="15px"
-                                />
-                                <Text
-                                    color="#1F2040"
-                                    fontFamily="Chakra Petch"
-                                    fontSize="18px"
-                                    fontWeight="medium"
-                                >
-                                    {cardInfo.totalAssetsInPositionValue[1]}{" "}
-                                    {state.quoteAssetName}
-                                </Text>
-                            </Stack>
-                        </Stack>
-                    </Stack>
-                    <Stack
-                        direction="row"
-                        borderBottom="1px"
-                        borderColor="#E8ECFD"
-                        pb="3px"
-                        justifyContent="space-between"
-                    >
-                        <Text
-                            color="#1F2040"
-                            fontFamily="Chakra Petch"
-                            fontSize="18px"
-                            fontWeight="medium"
-                        >
-                            Amount to Swap
-                        </Text>
-                        <Stack direction="row" spacing="30px">
-                            <Stack
-                                direction="row"
-                                spacing="5px"
-                                alignItems="center"
-                            >
-                                <Image
-                                    src={state.quoteAssetIcon}
-                                    w="15px"
-                                    h="15px"
-                                />
-                                <Text
-                                    color="#1F2040"
-                                    fontFamily="Chakra Petch"
-                                    fontSize="18px"
-                                    fontWeight="medium"
-                                >
-                                    {cardInfo.amountToSwap[0]}{" "}
-                                    {state.quoteAssetName}
-                                </Text>
-                            </Stack>
-                            <Stack
-                                direction="row"
-                                spacing="5px"
-                                alignItems="center"
-                            >
-                                <Image
-                                    src={state.baseAssetIcon}
-                                    w="15px"
-                                    h="15px"
-                                />
-                                <Text
-                                    color="#1F2040"
-                                    fontFamily="Chakra Petch"
-                                    fontSize="18px"
-                                    fontWeight="medium"
-                                >
-                                    {cardInfo.amountToSwap[1]}{" "}
-                                    {state.baseAssetName}
-                                </Text>
-                            </Stack>
                         </Stack>
                     </Stack>
                     <Stack
@@ -966,7 +981,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                             fontSize="18px"
                             fontWeight="medium"
                         >
-                            Long {cardInfo.netExposure} {state.baseAssetName}
+                            Long {cardInfo.netExp} {state.baseAssetName}
                         </Text>
                     </Stack>
                     <Stack
@@ -982,7 +997,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                             fontSize="18px"
                             fontWeight="medium"
                         >
-                            Share of Pool()
+                            Share of Pool ({state.quoteFarmName})
                         </Text>
                         <Text
                             color="#63637A"
