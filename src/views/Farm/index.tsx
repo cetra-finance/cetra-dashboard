@@ -181,7 +181,6 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         abi: ChamberV1ABI,
         functionName: "currentUSDBalance",
         watch: true,
-        enabled: isConnected,
     });
     const currentUsdAmount: BigNumber = currentUsdAmountResult
         ? (currentUsdAmountResult as BigNumber)

@@ -1,16 +1,15 @@
 import { FC } from "react";
 import { Box } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { useContractRead, useAccount } from "wagmi";
+import { useContractRead } from "wagmi";
 import { BigNumber } from "ethers";
 import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
 import { POOLS } from "../../pools";
 import { CetraList, CetraListItem } from "../../components";
+import Decimal from "decimal.js";
 
 const Strategies: FC = () => {
     const navigate = useNavigate();
-
-    const { address, isConnected } = useAccount();
 
     // TODO: Fetch all pools
     const pool = POOLS[0];
@@ -25,11 +24,10 @@ const Strategies: FC = () => {
         abi: ChamberV1ABI,
         functionName: "currentUSDBalance",
         watch: true,
-        enabled: isConnected,
     });
-    const currentUsdAmount: BigNumber = currentUsdAmountResult
-        ? (currentUsdAmountResult as BigNumber)
-        : BigNumber.from(0);
+    const currentUsdAmount: Decimal = currentUsdAmountResult
+        ? new Decimal((currentUsdAmountResult as BigNumber).toString()).div(1e6)
+        : new Decimal(0.0);
 
     return (
         <Box w="full" minH="90%">
@@ -48,7 +46,7 @@ const Strategies: FC = () => {
                         tvl={new Intl.NumberFormat("en-US", {
                             style: "currency",
                             currency: "USD",
-                        }).format(currentUsdAmount.toNumber() / 1e6)}
+                        }).format(currentUsdAmount.toNumber())}
                         totalApr="Total APR: --%"
                         dailyApr="Daily APR: --%"
                         strategy={pool.strategy}
