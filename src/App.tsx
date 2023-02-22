@@ -24,6 +24,7 @@ import {
     useNetwork,
 } from "wagmi";
 import { Routes, Route, useLocation } from "react-router-dom";
+import ReactGA from "react-ga4";
 import {
     Sidebar,
     SidebarLinkType,
@@ -68,6 +69,8 @@ const App: FC = () => {
     const [activePageTitle, setActivePageTitle] = useState(
         DEFAULT_SIDEBAR_LINKS[actualPageTitleIndex].linkText
     );
+
+    ReactGA.send({ hitType: "pageview", page: location.pathname });
 
     const {
         isOpen: isSwitchNetworkModalOpen,

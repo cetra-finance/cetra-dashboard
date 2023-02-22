@@ -5,6 +5,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
+import ReactGA from "react-ga4";
 import { defaultChains } from "./utils";
 
 const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
@@ -17,6 +18,8 @@ const client = createClient({
     provider,
     webSocketProvider,
 });
+
+ReactGA.initialize("G-S8ZDSJKWEY");
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
