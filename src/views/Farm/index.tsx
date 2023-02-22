@@ -794,12 +794,13 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                 </SimpleGrid>
                 <SimpleGrid
                     w="562px"
-                    boxShadow="0px 0px 38px 5px #0000000D"
                     pl="20px"
                     pr="20px"
                     pt="30px"
                     pb="30px"
                     gap="6px"
+                    border="1px solid"
+                    borderColor="#E8ECFD"
                     borderRadius="5px"
                 >
                     <Stack

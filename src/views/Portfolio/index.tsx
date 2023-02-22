@@ -1,15 +1,16 @@
 import { FC } from "react";
 import { Box } from "@chakra-ui/react";
-import { useAccount, useContractRead } from "wagmi";
+import { useAccount, useContractReads } from "wagmi";
 import { BigNumber } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { CetraList, CetraListItem } from "../../components";
 import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
 import { Pool, POOLS } from "../../pools";
+import Decimal from "decimal.js";
 
 interface UserPosition {
     pool: Pool;
-    usd: number;
+    usd: Decimal;
 }
 
 const Portfolio: FC = () => {
@@ -17,56 +18,61 @@ const Portfolio: FC = () => {
 
     const { address, isConnected } = useAccount();
 
-    // TODO: Fetch all pools
-    const pool = POOLS[0];
-
-    // Get user shares amount
+    // Get user shares amount from all pools
     const {
-        data: userSharesAmountResult,
+        data: userSharesAmountResults,
         isError: isUserSharesError,
         isLoading: isUserSharesLoading,
-    } = useContractRead({
-        address: pool.address,
-        abi: ChamberV1ABI,
-        functionName: "s_userShares",
-        args: [address],
+    } = useContractReads({
+        contracts: POOLS.map((pool) => {
+            return {
+                address: pool.address,
+                abi: ChamberV1ABI,
+                functionName: "s_userShares",
+                args: [address],
+            };
+        }),
         watch: true,
         enabled: isConnected,
     });
-    const userSharesAmount: BigNumber = userSharesAmountResult
-        ? (userSharesAmountResult as BigNumber)
-        : BigNumber.from(0);
+    const userSharesAmounts: BigNumber[] = userSharesAmountResults
+        ? (userSharesAmountResults as BigNumber[])
+        : POOLS.map(() => BigNumber.from(0));
 
-    // Get user shares amount in USD
+    // Get user shares amount in USD for all pools
     const {
-        data: userSharesAmountUsdResult,
+        data: userSharesAmountUsdResults,
         isError: isUserSharesUsdError,
         isLoading: isUserSharesUsdLoading,
-    } = useContractRead({
-        address: pool.address,
-        abi: ChamberV1ABI,
-        functionName: "sharesWorth",
-        args: [userSharesAmount],
+    } = useContractReads({
+        contracts: POOLS.map((pool, index) => {
+            return {
+                address: pool.address,
+                abi: ChamberV1ABI,
+                functionName: "sharesWorth",
+                args: [userSharesAmounts[index]],
+            };
+        }),
         watch: true,
-        enabled: isConnected && !userSharesAmount.isZero(),
+        enabled: isConnected,
     });
-    const userSharesAmountUsd: BigNumber = userSharesAmountUsdResult
-        ? (userSharesAmountUsdResult as BigNumber)
-        : BigNumber.from(0);
+    const userSharesAmountUsds: BigNumber[] = userSharesAmountUsdResults
+        ? (userSharesAmountUsdResults as BigNumber[])
+        : POOLS.map(() => BigNumber.from(0));
 
-    const userPositions: UserPosition[] = [
-        {
+    const userPositions: UserPosition[] = POOLS.map((pool, index) => {
+        return {
             pool,
-            usd: userSharesAmountUsd.toNumber() / 1e6,
-        },
-    ].filter((p) => p.usd > 0);
+            usd: new Decimal(userSharesAmountUsds[index].toString()).div(1e6),
+        };
+    }).filter((p) => !p.usd.isZero());
 
     return (
         <Box w="full" minH="90%">
             <CetraList
                 tabs={["Pool", "APY", "Total Position", "Farmed", "Strategy"]}
             >
-                {userPositions.map(({ pool, usd }) => (
+                {userPositions.map(({ pool, usd }, index) => (
                     <CetraListItem
                         key={pool.address}
                         poolName={pool.name}
@@ -77,11 +83,12 @@ const Portfolio: FC = () => {
                         quoteFarmIcon={pool.quoteFarmIcon}
                         quoteFarmName={pool.quoteFarmName}
                         apy="--%"
-                        tvl={`$${usd}`}
+                        tvl={`$${usd.toFixed(6)}`}
                         totalApr="$--"
                         dailyApr="--$ Since Yesterday"
                         strategy={pool.strategy}
                         actionText="Manage"
+                        divider={index < userPositions.length - 1}
                         onAction={() =>
                             navigate("/farm", {
                                 state: pool,

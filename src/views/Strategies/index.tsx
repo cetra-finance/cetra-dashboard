@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Box } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { useContractRead } from "wagmi";
+import { useContractReads } from "wagmi";
 import { BigNumber } from "ethers";
 import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
 import { POOLS } from "../../pools";
@@ -11,28 +11,31 @@ import Decimal from "decimal.js";
 const Strategies: FC = () => {
     const navigate = useNavigate();
 
-    // TODO: Fetch all pools
-    const pool = POOLS[0];
-
-    // Get current usd amount
+    // Get current usd amount for all pools
     const {
-        data: currentUsdAmountResult,
+        data: currentUsdAmountResults,
         isError: isCurrentUsdError,
         isLoading: isCurrentUsdLoading,
-    } = useContractRead({
-        address: pool.address,
-        abi: ChamberV1ABI,
-        functionName: "currentUSDBalance",
+    } = useContractReads({
+        contracts: POOLS.map((pool) => {
+            return {
+                address: pool.address,
+                abi: ChamberV1ABI,
+                functionName: "currentUSDBalance",
+            };
+        }),
         watch: true,
     });
-    const currentUsdAmount: Decimal = currentUsdAmountResult
-        ? new Decimal((currentUsdAmountResult as BigNumber).toString()).div(1e6)
-        : new Decimal(0.0);
+    const currentUsdAmounts: Decimal[] = currentUsdAmountResults
+        ? (currentUsdAmountResults as BigNumber[]).map((value) =>
+              new Decimal(value.toString()).div(1e6)
+          )
+        : POOLS.map(() => new Decimal(0.0));
 
     return (
         <Box w="full" minH="90%">
             <CetraList>
-                {POOLS.map((pool) => (
+                {POOLS.map((pool, index) => (
                     <CetraListItem
                         key={pool.address}
                         poolName={pool.name}
@@ -46,11 +49,12 @@ const Strategies: FC = () => {
                         tvl={new Intl.NumberFormat("en-US", {
                             style: "currency",
                             currency: "USD",
-                        }).format(currentUsdAmount.toNumber())}
+                        }).format(currentUsdAmounts[index].toNumber())}
                         totalApr="Total APR: --%"
                         dailyApr="Daily APR: --%"
                         strategy={pool.strategy}
                         actionText="Deposit"
+                        divider={index < POOLS.length - 1}
                         onAction={() =>
                             navigate("/farm", {
                                 state: pool,

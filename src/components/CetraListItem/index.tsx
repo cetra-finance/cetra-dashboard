@@ -20,6 +20,7 @@ interface CetraListItemProps {
     dailyApr: string;
     strategy: string;
     actionText: string;
+    divider: boolean;
     onAction?: () => void;
 }
 
@@ -37,12 +38,13 @@ const CetraListItem: FC<CetraListItemProps> = ({
     dailyApr,
     strategy,
     actionText,
+    divider,
     onAction,
 }) => {
     return (
         <SimpleGrid
             columns={6}
-            borderBottom="1px"
+            borderBottom={divider ? "1px" : "0px"}
             borderColor="#E8ECFD"
             mt="43px"
             justifyItems="center"
