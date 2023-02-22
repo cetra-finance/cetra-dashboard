@@ -14,6 +14,7 @@ import {
     ModalContent,
     ModalHeader,
     ModalBody,
+    Link,
 } from "@chakra-ui/react";
 import {
     useConnect,
@@ -59,6 +60,7 @@ const DEFAULT_SIDEBAR_LINKS: SidebarLink[] = [
 
 const App: FC = () => {
     const location = useLocation();
+
     let actualPageTitleIndex = DEFAULT_SIDEBAR_LINKS.findIndex(
         (value) => value.href === location.pathname
     );
@@ -158,7 +160,9 @@ const App: FC = () => {
                                 alignItems="center"
                             >
                                 <Box></Box>
-                                <Image src={CetraSvg} />
+                                <Link href="/">
+                                    <Image src={CetraSvg} />
+                                </Link>
                             </SimpleGrid>
                             <Box mt="48px">
                                 <Sidebar
