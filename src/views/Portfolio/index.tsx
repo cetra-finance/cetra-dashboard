@@ -36,7 +36,9 @@ const Portfolio: FC = () => {
         enabled: isConnected,
     });
     const userSharesAmounts: BigNumber[] = userSharesAmountResults
-        ? (userSharesAmountResults as BigNumber[])
+        ? userSharesAmountResults.map((value) => {
+              return value ? (value as BigNumber) : BigNumber.from(0);
+          })
         : POOLS.map(() => BigNumber.from(0));
 
     // Get user shares amount in USD for all pools
@@ -57,7 +59,9 @@ const Portfolio: FC = () => {
         enabled: isConnected,
     });
     const userSharesAmountUsds: BigNumber[] = userSharesAmountUsdResults
-        ? (userSharesAmountUsdResults as BigNumber[])
+        ? userSharesAmountUsdResults.map((value) => {
+              return value ? (value as BigNumber) : BigNumber.from(0);
+          })
         : POOLS.map(() => BigNumber.from(0));
 
     const userPositions: UserPosition[] = POOLS.map((pool, index) => {
