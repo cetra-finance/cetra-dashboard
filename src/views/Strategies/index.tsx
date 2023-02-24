@@ -8,9 +8,11 @@ import { POOLS } from "../../pools";
 import { CetraList, CetraListItem } from "../../components";
 import CetraBetaLogo from "../../assets/cetra-beta.svg";
 import Decimal from "decimal.js";
+import { usePoolsStats } from "../../hooks";
 
 const Strategies: FC = () => {
     const navigate = useNavigate();
+    const poolsStats = usePoolsStats();
 
     // Get current usd amount for all pools
     const {
@@ -62,33 +64,57 @@ const Strategies: FC = () => {
                     </Stack>
                 </Box>
                 <CetraList>
-                    {POOLS.map((pool, index) => (
-                        <CetraListItem
-                            key={pool.address}
-                            poolName={pool.name}
-                            baseAssetIcon={pool.baseAssetIcon}
-                            quoteAssetIcon={pool.quoteAssetIcon}
-                            baseFarmIcon={pool.baseFarmIcon}
-                            baseFarmName={pool.baseFarmName}
-                            quoteFarmIcon={pool.quoteFarmIcon}
-                            quoteFarmName={pool.quoteFarmName}
-                            apy="--%"
-                            tvl={new Intl.NumberFormat("en-US", {
-                                style: "currency",
-                                currency: "USD",
-                            }).format(currentUsdAmounts[index].toNumber())}
-                            totalApr="Total APR: --%"
-                            dailyApr="Daily APR: --%"
-                            strategy={pool.strategy}
-                            actionText="Deposit"
-                            divider={index < POOLS.length - 1}
-                            onAction={() =>
-                                navigate("/farm", {
-                                    state: pool,
-                                })
-                            }
-                        />
-                    ))}
+                    {POOLS.map((pool, index) => {
+                        const maybePoolStats = poolsStats.find(
+                            (stats) =>
+                                stats.address.toLowerCase() ===
+                                pool.address.toLowerCase()
+                        );
+
+                        const apy = maybePoolStats
+                            ? new Decimal(maybePoolStats.baseApy).toFixed(3)
+                            : "0";
+                        const weeklyApr = maybePoolStats
+                            ? maybePoolStats.weeklyBasedApr === "calculating.."
+                                ? maybePoolStats.weeklyBasedApr
+                                : new Decimal(
+                                      maybePoolStats.weeklyBasedApr
+                                  ).toFixed(3)
+                            : "0";
+                        const dailyApr = maybePoolStats
+                            ? new Decimal(maybePoolStats.dailyBasedApr).toFixed(
+                                  3
+                              )
+                            : "0";
+
+                        return (
+                            <CetraListItem
+                                key={pool.address}
+                                poolName={pool.name}
+                                baseAssetIcon={pool.baseAssetIcon}
+                                quoteAssetIcon={pool.quoteAssetIcon}
+                                baseFarmIcon={pool.baseFarmIcon}
+                                baseFarmName={pool.baseFarmName}
+                                quoteFarmIcon={pool.quoteFarmIcon}
+                                quoteFarmName={pool.quoteFarmName}
+                                apy={`${apy}%`}
+                                tvl={new Intl.NumberFormat("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                }).format(currentUsdAmounts[index].toNumber())}
+                                totalApr={`Total APR: ${weeklyApr}%`}
+                                dailyApr={`Daily APR: ${dailyApr}%`}
+                                strategy={pool.strategy}
+                                actionText="Deposit"
+                                divider={index < POOLS.length - 1}
+                                onAction={() =>
+                                    navigate("/farm", {
+                                        state: { state: pool, apy },
+                                    })
+                                }
+                            />
+                        );
+                    })}
                 </CetraList>
             </Stack>
         </Box>

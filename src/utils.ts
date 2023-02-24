@@ -4,12 +4,18 @@ import { Address } from "wagmi";
 
 export const IS_PROD: boolean = import.meta.env.VITE_PROD === "true";
 
+export const API_GATEWAY_URL: string =
+    IS_PROD === true
+        ? "https://api-gateway-six.vercel.app/api"
+        : "http://localhost:3000/api";
+
 export const cetraDevLocalhost: Chain = {
     ...localhost,
     id: 31337,
 };
 
-export const defaultChains = IS_PROD === true ? [polygon] : [cetraDevLocalhost];
+export const DEFAULT_CHAINS =
+    IS_PROD === true ? [polygon] : [cetraDevLocalhost];
 
 export const USDC_ADDRESS: Address =
     "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";

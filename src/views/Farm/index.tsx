@@ -49,7 +49,7 @@ interface FarmProps {
 const Farm: FC<FarmProps> = ({ onLoaded }) => {
     const location = useLocation();
 
-    const state = location.state as Pool;
+    const { state, apy } = location.state as { state: Pool; apy: string };
     if (!state) {
         window.location.href = "/";
         return null;
@@ -630,7 +630,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                                 fontSize="20px"
                                 fontWeight="bold"
                             >
-                                APY: --%
+                                APY: {apy}%
                             </Text>
                             <Text
                                 color="#1F2040"

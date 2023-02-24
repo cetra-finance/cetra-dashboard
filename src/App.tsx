@@ -33,7 +33,7 @@ import {
     CetraButton,
 } from "./components";
 import { Strategies, Farm, Portfolio, Settings } from "./views";
-import { getTruncatedAddress, defaultChains } from "./utils";
+import { getTruncatedAddress, DEFAULT_CHAINS } from "./utils";
 import CetraSvg from "./assets/cetra.svg";
 
 const DEFAULT_SIDEBAR_LINKS: SidebarLink[] = [
@@ -87,7 +87,7 @@ const App: FC = () => {
 
     const { chain } = useNetwork();
     // TODO: Add all supported chains
-    const chainId = defaultChains[0].id;
+    const chainId = DEFAULT_CHAINS[0].id;
     const {
         chains: switchNetworkChains,
         error: switchNetworkError,

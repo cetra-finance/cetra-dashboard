@@ -6,11 +6,12 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import ReactGA from "react-ga4";
-import { defaultChains } from "./utils";
+import { DEFAULT_CHAINS } from "./utils";
 
-const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
-    publicProvider(),
-]);
+const { chains, provider, webSocketProvider } = configureChains(
+    DEFAULT_CHAINS,
+    [publicProvider()]
+);
 
 const client = createClient({
     autoConnect: true,
