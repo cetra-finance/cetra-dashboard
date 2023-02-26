@@ -9,6 +9,7 @@ interface CetraButtonProps {
     h?: string;
     border?: string;
     borderColor?: string;
+    borderRadius?: string;
     bgColor?: string;
     color?: string;
     _hover?: SystemStyleObject;
@@ -26,6 +27,7 @@ const CetraButton: FC<CetraButtonProps> = ({
     h,
     border,
     borderColor,
+    borderRadius,
     bgColor,
     color,
     _hover,
@@ -52,9 +54,10 @@ const CetraButton: FC<CetraButtonProps> = ({
             h={h ?? "full"}
             border={border}
             borderColor={borderColor}
+            borderRadius={borderRadius}
             _hover={
                 _hover ?? {
-                    bg: "#FFFFFF",
+                    bg: "transparent",
                     color: "#7173FC",
                     border: "1px",
                     borderColor: "#7173FC",
@@ -62,7 +65,7 @@ const CetraButton: FC<CetraButtonProps> = ({
             }
             _active={
                 _active ?? {
-                    bg: "#FFFFFF",
+                    bg: "transparent",
                     color: "#7173FC",
                     border: "1px",
                     borderColor: "#7173FC",

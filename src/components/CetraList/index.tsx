@@ -21,9 +21,8 @@ const CetraList: FC<CetraListProps> = ({ children, tabs }) => {
         <Box
             w="full"
             h="full"
-            border="1px solid"
-            borderColor="#B9B9C3"
-            rounded="lg"
+            border="2px solid"
+            borderColor="#E8ECFD"
             p={[`${P_SM}px`, `${P_MD}px`, `${P_LG}px`]}
         >
             <SimpleGrid columns={6}>

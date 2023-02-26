@@ -1,12 +1,12 @@
 import { FC } from "react";
-import { Box, Stack, Image, Text, Link } from "@chakra-ui/react";
+import { Box, Stack, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useContractReads } from "wagmi";
 import { BigNumber } from "ethers";
 import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
 import { POOLS } from "../../pools";
 import { CetraList, CetraListItem } from "../../components";
-import CetraBetaLogo from "../../assets/cetra-beta.svg";
+import HandEmojiImg from "../../assets/hand-emoji.png";
 import Decimal from "decimal.js";
 import { usePoolsStats } from "../../hooks";
 
@@ -40,26 +40,17 @@ const Strategies: FC = () => {
     return (
         <Box w="full" minH="90%">
             <Stack direction="column" gap={6}>
-                <Box
-                    border="1px"
-                    borderColor="#1F2040"
-                    borderRadius="5px"
-                    pt="2"
-                    pb="2"
-                    pl="3.5"
-                    pr="3.5"
-                >
+                <Box border="2px" borderColor="#E8ECFD" pt="2" pb="2">
                     <Stack direction="row" spacing={3.5} align="center">
-                        <Image src={CetraBetaLogo} w="8" h="8" />
+                        <Image src={HandEmojiImg} w={10} h={10} />
                         <Text
                             color="#1F2040"
                             fontSize="22px"
                             fontWeight="bold"
                             fontFamily="Chakra Petch"
                         >
-                            Cetra is in beta mode on mainnet, read the
-                            announcement{" "}
-                            <Link textDecoration="underline">here</Link>
+                            Cetra live on Polygon Mainnet! Try real yield on
+                            your stablecoins now
                         </Text>
                     </Stack>
                 </Box>

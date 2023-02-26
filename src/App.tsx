@@ -32,7 +32,7 @@ import {
     SidebarLink,
     CetraButton,
 } from "./components";
-import { Strategies, Farm, Portfolio, Settings } from "./views";
+import { Strategies, Farm, Portfolio, Onboarding } from "./views";
 import { getTruncatedAddress, DEFAULT_CHAINS } from "./utils";
 import CetraSvg from "./assets/cetra.svg";
 
@@ -48,13 +48,13 @@ const DEFAULT_SIDEBAR_LINKS: SidebarLink[] = [
         linkType: SidebarLinkType.Main,
     },
     {
-        linkText: "Docs",
-        href: "https://cetra.gitbook.io/welcome/",
+        linkText: "Onboarding",
+        href: "/onboarding",
         linkType: SidebarLinkType.Sub,
     },
     {
-        linkText: "Settings",
-        href: "/settings",
+        linkText: "Docs",
+        href: "https://cetra.gitbook.io/welcome/",
         linkType: SidebarLinkType.Sub,
     },
 ];
@@ -239,8 +239,8 @@ const App: FC = () => {
                                         element={<Portfolio />}
                                     />
                                     <Route
-                                        path="/settings"
-                                        element={<Settings />}
+                                        path="/onboarding"
+                                        element={<Onboarding />}
                                     />
                                     <Route
                                         path="/farm"
