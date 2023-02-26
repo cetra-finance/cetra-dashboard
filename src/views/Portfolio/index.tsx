@@ -4,7 +4,7 @@ import { useAccount, useContractReads } from "wagmi";
 import { BigNumber } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { CetraList, CetraListItem } from "../../components";
-import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
+import IChamberV1ABI from "../../assets/abis/IChamberV1.json";
 import { Pool, POOLS } from "../../pools";
 import Decimal from "decimal.js";
 import { usePoolsStats } from "../../hooks";
@@ -21,6 +21,54 @@ const Portfolio: FC = () => {
 
     const { address, isConnected } = useAccount();
 
+    // Get current USD amount for all pools
+    const {
+        data: currentUsdAmountResults,
+        isError: isCurrentUsdError,
+        isLoading: isCurrentUsdLoading,
+    } = useContractReads({
+        contracts: POOLS.map((pool) => {
+            return {
+                address: pool.address,
+                abi: IChamberV1ABI,
+                functionName: "currentUSDBalance",
+            };
+        }),
+        watch: true,
+        enabled: isConnected,
+    });
+    const currentUsdAmounts: Decimal[] = currentUsdAmountResults
+        ? currentUsdAmountResults.map((value) => {
+              return value
+                  ? new Decimal((value as BigNumber).toString()).div(1e6)
+                  : new Decimal(0.0);
+          })
+        : POOLS.map(() => new Decimal(0.0));
+
+    // Get current total shares amount for all pools
+    const {
+        data: totalSharesAmountsResults,
+        isError: isTotalSharesError,
+        isLoading: isTotalSharesLoading,
+    } = useContractReads({
+        contracts: POOLS.map((pool) => {
+            return {
+                address: pool.address,
+                abi: IChamberV1ABI,
+                functionName: "get_s_totalShares",
+            };
+        }),
+        watch: true,
+        enabled: isConnected,
+    });
+    const totalSharesAmounts: Decimal[] = totalSharesAmountsResults
+        ? totalSharesAmountsResults.map((value) => {
+              return value
+                  ? new Decimal((value as BigNumber).toString()).div(1e6)
+                  : new Decimal(0.0);
+          })
+        : POOLS.map(() => new Decimal(0.0));
+
     // Get user shares amount from all pools
     const {
         data: userSharesAmountResults,
@@ -30,8 +78,8 @@ const Portfolio: FC = () => {
         contracts: POOLS.map((pool) => {
             return {
                 address: pool.address,
-                abi: ChamberV1ABI,
-                functionName: "s_userShares",
+                abi: IChamberV1ABI,
+                functionName: "get_s_userShares",
                 args: [address],
             };
         }),
@@ -44,34 +92,18 @@ const Portfolio: FC = () => {
           })
         : POOLS.map(() => BigNumber.from(0));
 
-    // Get user shares amount in USD for all pools
-    const {
-        data: userSharesAmountUsdResults,
-        isError: isUserSharesUsdError,
-        isLoading: isUserSharesUsdLoading,
-    } = useContractReads({
-        contracts: POOLS.map((pool, index) => {
-            return {
-                address: pool.address,
-                abi: ChamberV1ABI,
-                functionName: "sharesWorth",
-                args: [userSharesAmounts[index]],
-            };
-        }),
-        watch: true,
-        enabled: isConnected,
-    });
-    const userSharesAmountUsds: BigNumber[] = userSharesAmountUsdResults
-        ? userSharesAmountUsdResults.map((value) => {
-              return value ? (value as BigNumber) : BigNumber.from(0);
-          })
-        : POOLS.map(() => BigNumber.from(0));
-
     const userPositions: UserPosition[] = POOLS.map((pool, index) => {
+        const shares = new Decimal(userSharesAmounts[index].toString()).div(
+            1e6
+        );
+        const usd = shares
+            .mul(currentUsdAmounts[index])
+            .div(totalSharesAmounts[index]);
+
         return {
             pool,
-            usd: new Decimal(userSharesAmountUsds[index].toString()).div(1e6),
-            shares: new Decimal(userSharesAmounts[index].toString()).div(1e6),
+            usd,
+            shares,
         };
     }).filter((p) => !p.usd.isZero());
 

@@ -21,12 +21,15 @@ import {
     useContractWrite,
     usePrepareContractWrite,
     useContractRead,
+    Address,
 } from "wagmi";
 import { erc20ABI } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 import { useLocation } from "react-router-dom";
 import Decimal from "decimal.js";
-import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
+import IChamberV1ABI from "../../assets/abis/IChamberV1.json";
+import IVariableDebtTokenABI from "../../assets/abis/IVariableDebtToken.json";
+import ILendingPoolABI from "../../assets/abis/ILendingPool.json";
 import CetraBuzzLogo from "../../assets/cetra-buzz.svg";
 import CetraMoneyBagLogo from "../../assets/cetra-money-bag.svg";
 import { CetraButton } from "../../components";
@@ -135,7 +138,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
             : false);
     const { config: depositConfig } = usePrepareContractWrite({
         address: state.address,
-        abi: ChamberV1ABI,
+        abi: IChamberV1ABI,
         functionName: "mint",
         args: [denormalizedInputAmount],
         enabled: isDepositAvailable,
@@ -161,14 +164,17 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         isLoading: isTotalSharesLoading,
     } = useContractRead({
         address: state.address,
-        abi: ChamberV1ABI,
-        functionName: "s_totalShares",
+        abi: IChamberV1ABI,
+        functionName: "get_s_totalShares",
         watch: true,
         enabled: isConnected,
     });
     const totalSharesAmount: BigNumber = totalSharesAmountResult
         ? (totalSharesAmountResult as BigNumber)
         : BigNumber.from(0);
+    const totalSharesAmountScaled = new Decimal(
+        totalSharesAmount.toString()
+    ).div(1e6);
 
     // Get current usd amount
     const {
@@ -177,13 +183,16 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         isLoading: isCurrentUsdLoading,
     } = useContractRead({
         address: state.address,
-        abi: ChamberV1ABI,
+        abi: IChamberV1ABI,
         functionName: "currentUSDBalance",
         watch: true,
     });
     const currentUsdAmount: BigNumber = currentUsdAmountResult
         ? (currentUsdAmountResult as BigNumber)
         : BigNumber.from(0);
+    const currentUsdAmountScaled = new Decimal(currentUsdAmount.toString()).div(
+        1e6
+    );
 
     // Get current pool reserves
     const {
@@ -192,7 +201,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         isLoading: isCurrentPoolReservesLoading,
     } = useContractRead({
         address: state.address,
-        abi: ChamberV1ABI,
+        abi: IChamberV1ABI,
         functionName: "calculateCurrentPoolReserves",
         watch: true,
         enabled: isConnected,
@@ -201,73 +210,156 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         ? (currentPoolReservesResult as BigNumber[])
         : [BigNumber.from(0), BigNumber.from(0)];
 
-    // Get VWMatic token balance
+    // Get base aave token address
     const {
-        data: vWmaticTokenBalanceResult,
-        isError: isVwmaticTokenBalanceError,
-        isLoading: isVwmaticTokenBalanceLoading,
+        data: aaveVtoken0Result,
+        isError: isAaveVtoken0Error,
+        isLoading: isAaveVtoken0Loading,
     } = useContractRead({
         address: state.address,
-        abi: ChamberV1ABI,
-        functionName: "getVWMATICTokenBalance",
+        abi: IChamberV1ABI,
+        functionName: "get_i_aaveVToken0",
         watch: true,
         enabled: isConnected,
     });
-    const vWmaticTokenBalance: Decimal = vWmaticTokenBalanceResult
-        ? new Decimal((vWmaticTokenBalanceResult as BigNumber).toString()).div(
-              1e18
-          )
-        : new Decimal(0);
+    const aaveVtoken0: Address = aaveVtoken0Result as Address;
 
-    // Get VWETH token balance
+    // Get quote aave token address
     const {
-        data: vWethTokenBalanceResult,
-        isError: isVwethTokenBalanceError,
-        isLoading: isVwethTokenBalanceLoading,
+        data: aaveVtoken1Result,
+        isError: isAaveVtoken1Error,
+        isLoading: isAaveVtoken1Loading,
     } = useContractRead({
         address: state.address,
-        abi: ChamberV1ABI,
-        functionName: "getVWETHTokenBalance",
+        abi: IChamberV1ABI,
+        functionName: "get_i_aaveVToken1",
         watch: true,
         enabled: isConnected,
     });
-    const vWethTokenBalance: Decimal = vWethTokenBalanceResult
-        ? new Decimal((vWethTokenBalanceResult as BigNumber).toString()).div(
-              1e18
-          )
-        : new Decimal(0);
+    const aaveVtoken1: Address = aaveVtoken1Result as Address;
+
+    // Get base aave token scaled balance
+    const {
+        data: aaveVtoken0ScaledBalanceResult,
+        isError: isAaveVtoken0ScaledBalanceError,
+        isLoading: isAaveVtoken0ScaledBalanceLoading,
+    } = useContractRead({
+        address: aaveVtoken0,
+        abi: IVariableDebtTokenABI,
+        functionName: "scaledBalanceOf",
+        args: [state.address],
+        watch: true,
+        enabled: isConnected,
+    });
+    const aaveVtoken0ScaledBalance: BigNumber = aaveVtoken0ScaledBalanceResult
+        ? (aaveVtoken0ScaledBalanceResult as BigNumber)
+        : BigNumber.from(0);
+
+    // Get quote aave token scaled balance
+    const {
+        data: aaveVtoken1ScaledBalanceResult,
+        isError: isAaveVtoken1ScaledBalanceError,
+        isLoading: isAaveVtoken1ScaledBalanceLoading,
+    } = useContractRead({
+        address: aaveVtoken1,
+        abi: IVariableDebtTokenABI,
+        functionName: "scaledBalanceOf",
+        args: [state.address],
+        watch: true,
+        enabled: isConnected,
+    });
+    const aaveVtoken1ScaledBalance: BigNumber = aaveVtoken1ScaledBalanceResult
+        ? (aaveVtoken1ScaledBalanceResult as BigNumber)
+        : BigNumber.from(0);
+
+    // Get base aave normalized variable debt
+    const {
+        data: baseNormalizedVariableDebtResult,
+        isError: isBaseNormalizedVariableDebtError,
+        isLoading: isBaseNormalizedVariableDebtLoading,
+    } = useContractRead({
+        address: state.aavePool,
+        abi: ILendingPoolABI,
+        functionName: "getReserveNormalizedVariableDebt",
+        args: [aaveVtoken0],
+        watch: true,
+        enabled: isConnected,
+    });
+    const baseNormalizedVariableDebt: BigNumber =
+        baseNormalizedVariableDebtResult
+            ? (baseNormalizedVariableDebtResult as BigNumber)
+            : BigNumber.from(0);
+
+    // Get quote aave normalized variable debt
+    const {
+        data: quoteNormalizedVariableDebtResult,
+        isError: isQuoteNormalizedVariableDebtError,
+        isLoading: isQuoteNormalizedVariableDebtLoading,
+    } = useContractRead({
+        address: state.aavePool,
+        abi: ILendingPoolABI,
+        functionName: "getReserveNormalizedVariableDebt",
+        args: [aaveVtoken1],
+        watch: true,
+        enabled: isConnected,
+    });
+    const quoteNormalizedVariableDebt: BigNumber =
+        quoteNormalizedVariableDebtResult
+            ? (quoteNormalizedVariableDebtResult as BigNumber)
+            : BigNumber.from(0);
+
+    const aaveVtoken0ScaledBalanceScaled = new Decimal(
+        aaveVtoken0ScaledBalance.toString()
+    ).div(1e18);
+    const aaveVtoken1ScaledBalanceScaled = new Decimal(
+        aaveVtoken1ScaledBalance.toString()
+    ).div(1e18);
+
+    const baseNormalizedVariableDebtScaled = new Decimal(
+        baseNormalizedVariableDebt.toString()
+    ).div(1e18);
+    const quoteNormalizedVariableDebtScaled = new Decimal(
+        quoteNormalizedVariableDebt.toString()
+    ).div(1e18);
+
+    const vWmaticTokenBalance = aaveVtoken0ScaledBalanceScaled
+        .mul(baseNormalizedVariableDebtScaled)
+        .mul(1e18);
+    const vWethTokenBalance = aaveVtoken1ScaledBalanceScaled
+        .mul(quoteNormalizedVariableDebtScaled)
+        .mul(1e18);
 
     // Get user shares amount
     const {
-        data: userSharesAmount,
+        data: userSharesAmountResult,
         isError: isUserSharesError,
         isLoading: isUserSharesLoading,
     } = useContractRead({
         address: state.address,
-        abi: ChamberV1ABI,
-        functionName: "s_userShares",
+        abi: IChamberV1ABI,
+        functionName: "get_s_userShares",
         args: [address],
         watch: true,
         enabled: isConnected,
     });
+    const userSharesAmount: BigNumber = userSharesAmountResult
+        ? (userSharesAmountResult as BigNumber)
+        : BigNumber.from(0);
+    const userSharesAmountScaled = new Decimal(userSharesAmount.toString()).div(
+        1e6
+    );
 
     // Get user shares amount in USD
-    const {
-        data: userSharesAmountUSD,
-        isError: isUserSharesUsdError,
-        isLoading: isUserSharesUsdLoading,
-    } = useContractRead({
-        address: state.address,
-        abi: ChamberV1ABI,
-        functionName: "sharesWorth",
-        args: [userSharesAmount],
-        watch: true,
-        enabled:
-            isConnected &&
-            (userSharesAmount
-                ? !(userSharesAmount as BigNumber).isZero()
-                : false),
-    });
+    const userSharesAmountUsdScaledResult = userSharesAmountScaled
+        .mul(currentUsdAmountScaled)
+        .div(totalSharesAmountScaled);
+    const userSharesAmountUsdScaled = userSharesAmountUsdScaledResult.isNaN()
+        ? new Decimal(0)
+        : userSharesAmountUsdScaledResult;
+
+    const userSharesAmountUSD = BigNumber.from(
+        userSharesAmountUsdScaled.mul(1e6).toFixed(0)
+    );
 
     // Prepare burn(withdraw) call
     const burnAmount = currentUsdAmount.isZero()
@@ -289,7 +381,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
             : false);
     const { config: withdrawConfig } = usePrepareContractWrite({
         address: state.address,
-        abi: ChamberV1ABI,
+        abi: IChamberV1ABI,
         functionName: "burn",
         args: [burnAmount],
         enabled: isWithdrawAvailable,

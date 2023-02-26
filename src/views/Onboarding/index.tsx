@@ -4,7 +4,6 @@ import {
     Box,
     Text,
     Image,
-    Icon,
     Link,
     Modal,
     ModalOverlay,
@@ -158,13 +157,13 @@ const Onboarding: FC = () => {
                                 Book a Call
                             </CetraButton>
                         </Stack>
-                        <Image w="fit-content" h="fit-content" src={PunkImg} />
+                        <Image w="fit-content" h="269px" src={PunkImg} />
                     </Stack>
                 </Box>
             </Stack>
             <Stack spacing={20} direction="row" h="full">
                 <Box bg="#E8ECFD" w="full" h="full">
-                    <Stack p={9}>
+                    <Stack p={9} h="full">
                         <Stack spacing={3} direction="column">
                             <Text
                                 color="#1F2040"
@@ -172,7 +171,11 @@ const Onboarding: FC = () => {
                                 fontSize="24px"
                                 fontFamily="Chakra Petch"
                             >
-                                How Strategy №1 works
+                                How Strategy{" "}
+                                <Text as="span" fontFamily="sans-serif">
+                                    №
+                                </Text>
+                                1 works
                             </Text>
                             <Text
                                 maxW="337px"

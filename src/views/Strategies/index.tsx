@@ -3,7 +3,7 @@ import { Box, Stack, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useContractReads } from "wagmi";
 import { BigNumber } from "ethers";
-import ChamberV1ABI from "../../assets/abis/ChamberV1.json";
+import IChamberV1ABI from "../../assets/abis/IChamberV1.json";
 import { POOLS } from "../../pools";
 import { CetraList, CetraListItem } from "../../components";
 import HandEmojiImg from "../../assets/hand-emoji.png";
@@ -14,7 +14,7 @@ const Strategies: FC = () => {
     const navigate = useNavigate();
     const poolsStats = usePoolsStats();
 
-    // Get current usd amount for all pools
+    // Get current USD amount for all pools
     const {
         data: currentUsdAmountResults,
         isError: isCurrentUsdError,
@@ -23,7 +23,7 @@ const Strategies: FC = () => {
         contracts: POOLS.map((pool) => {
             return {
                 address: pool.address,
-                abi: ChamberV1ABI,
+                abi: IChamberV1ABI,
                 functionName: "currentUSDBalance",
             };
         }),

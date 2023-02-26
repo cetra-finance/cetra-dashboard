@@ -4,10 +4,7 @@ import { Address } from "wagmi";
 
 export const IS_PROD: boolean = import.meta.env.VITE_PROD === "true";
 
-export const API_GATEWAY_URL: string =
-    IS_PROD === true
-        ? "https://api-gateway-six.vercel.app/api"
-        : "http://localhost:3000/api";
+export const API_GATEWAY_URL: string = "https://api-gateway-six.vercel.app/api";
 
 export const cetraDevLocalhost: Chain = {
     ...localhost,
