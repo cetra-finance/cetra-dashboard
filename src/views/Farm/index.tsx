@@ -436,27 +436,21 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         : calcUserSharesAmount.div(normalizedTotalSharesAmount);
 
     const calcAssetsInPool: Decimal[] = [
-        // WETH
-        new Decimal(currentPoolReserves[1].toString())
+        new Decimal(currentPoolReserves[0].toString())
             .div(new Decimal(1e18))
             .mul(calcShareOfPool),
-        // WMATIC
-        new Decimal(currentPoolReserves[0].toString())
+        new Decimal(currentPoolReserves[1].toString())
             .div(new Decimal(1e18))
             .mul(calcShareOfPool),
     ];
 
     const calcAssetsBorrowed: Decimal[] = [
-        // WETH
         vWethTokenBalance.mul(calcShareOfPool),
-        // WMATIC
         vWmaticTokenBalance.mul(calcShareOfPool),
     ];
 
     const calcNetExp: Decimal[] = [
-        // WETH
         calcAssetsInPool[0].sub(calcAssetsBorrowed[0]),
-        // WMATIC
         calcAssetsInPool[1].sub(calcAssetsBorrowed[1]),
     ];
 

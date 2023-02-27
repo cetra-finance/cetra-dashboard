@@ -25,6 +25,7 @@ const Portfolio: FC = () => {
     const {
         data: currentUsdAmountResults,
         isError: isCurrentUsdError,
+        isSuccess: isCurrentUsdSuccess,
         isLoading: isCurrentUsdLoading,
     } = useContractReads({
         contracts: POOLS.map((pool) => {
@@ -37,18 +38,21 @@ const Portfolio: FC = () => {
         watch: true,
         enabled: isConnected,
     });
-    const currentUsdAmounts: Decimal[] = currentUsdAmountResults
-        ? currentUsdAmountResults.map((value) => {
-              return value
-                  ? new Decimal((value as BigNumber).toString()).div(1e6)
-                  : new Decimal(0.0);
-          })
-        : POOLS.map(() => new Decimal(0.0));
+    let currentUsdAmounts: Decimal[];
+    if (isCurrentUsdSuccess && currentUsdAmountResults !== undefined) {
+        currentUsdAmounts = currentUsdAmountResults.map((value) => {
+            return new Decimal((value as BigNumber).toString()).div(1e6);
+        });
+    } else {
+        currentUsdAmounts = POOLS.map(() => new Decimal(0));
+    }
+    console.log(`currentUsdAmounts: ${currentUsdAmounts}`);
 
     // Get current total shares amount for all pools
     const {
         data: totalSharesAmountsResults,
         isError: isTotalSharesError,
+        isSuccess: isTotalSharesSuccess,
         isLoading: isTotalSharesLoading,
     } = useContractReads({
         contracts: POOLS.map((pool) => {
@@ -61,18 +65,21 @@ const Portfolio: FC = () => {
         watch: true,
         enabled: isConnected,
     });
-    const totalSharesAmounts: Decimal[] = totalSharesAmountsResults
-        ? totalSharesAmountsResults.map((value) => {
-              return value
-                  ? new Decimal((value as BigNumber).toString()).div(1e6)
-                  : new Decimal(0.0);
-          })
-        : POOLS.map(() => new Decimal(0.0));
+    let totalSharesAmounts: Decimal[];
+    if (isTotalSharesSuccess && totalSharesAmountsResults !== undefined) {
+        totalSharesAmounts = totalSharesAmountsResults.map((value) => {
+            return new Decimal((value as BigNumber).toString()).div(1e6);
+        });
+    } else {
+        totalSharesAmounts = POOLS.map(() => new Decimal(0));
+    }
+    console.log(`totalSharesAmounts: ${totalSharesAmounts}`);
 
     // Get user shares amount from all pools
     const {
         data: userSharesAmountResults,
         isError: isUserSharesError,
+        isSuccess: isUserSharesSuccess,
         isLoading: isUserSharesLoading,
     } = useContractReads({
         contracts: POOLS.map((pool) => {
@@ -86,13 +93,15 @@ const Portfolio: FC = () => {
         watch: true,
         enabled: isConnected,
     });
-    const userSharesAmounts: Decimal[] = userSharesAmountResults
-        ? userSharesAmountResults.map((value) => {
-              return value
-                  ? new Decimal((value as BigNumber).toString()).div(1e6)
-                  : new Decimal(0);
-          })
-        : POOLS.map(() => new Decimal(0));
+    let userSharesAmounts: Decimal[];
+    if (isUserSharesSuccess && userSharesAmountResults !== undefined) {
+        userSharesAmounts = userSharesAmountResults.map((value) => {
+            return new Decimal((value as BigNumber).toString()).div(1e6);
+        });
+    } else {
+        userSharesAmounts = POOLS.map(() => new Decimal(0));
+    }
+    console.log(`userSharesAmounts: ${userSharesAmounts}`);
 
     const userPositions: UserPosition[] = POOLS.map((pool, index) => {
         const usd = userSharesAmounts[index]

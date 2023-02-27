@@ -18,6 +18,7 @@ const Strategies: FC = () => {
     const {
         data: currentUsdAmountResults,
         isError: isCurrentUsdError,
+        isSuccess: isCurrentUsdSuccess,
         isLoading: isCurrentUsdLoading,
     } = useContractReads({
         contracts: POOLS.map((pool) => {
@@ -29,13 +30,14 @@ const Strategies: FC = () => {
         }),
         watch: true,
     });
-    const currentUsdAmounts: Decimal[] = currentUsdAmountResults
-        ? currentUsdAmountResults.map((value) => {
-              return value
-                  ? new Decimal((value as BigNumber).toString()).div(1e6)
-                  : new Decimal(0.0);
-          })
-        : POOLS.map(() => new Decimal(0.0));
+    let currentUsdAmounts: Decimal[];
+    if (isCurrentUsdSuccess && currentUsdAmountResults !== undefined) {
+        currentUsdAmounts = currentUsdAmountResults.map((value) => {
+            return new Decimal((value as BigNumber).toString()).div(1e6);
+        });
+    } else {
+        currentUsdAmounts = POOLS.map(() => new Decimal(0));
+    }
 
     return (
         <Box w="full" minH="90%">
