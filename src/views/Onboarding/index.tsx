@@ -193,6 +193,7 @@ const Onboarding: FC = () => {
                             h="full"
                             alignSelf="center"
                             justifySelf="center"
+                            loading="eager"
                             src={HowStratWorksLogo}
                         />
                     </Stack>

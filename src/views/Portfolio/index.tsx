@@ -86,24 +86,23 @@ const Portfolio: FC = () => {
         watch: true,
         enabled: isConnected,
     });
-    const userSharesAmounts: BigNumber[] = userSharesAmountResults
+    const userSharesAmounts: Decimal[] = userSharesAmountResults
         ? userSharesAmountResults.map((value) => {
-              return value ? (value as BigNumber) : BigNumber.from(0);
+              return value
+                  ? new Decimal((value as BigNumber).toString()).div(1e6)
+                  : new Decimal(0);
           })
-        : POOLS.map(() => BigNumber.from(0));
+        : POOLS.map(() => new Decimal(0));
 
     const userPositions: UserPosition[] = POOLS.map((pool, index) => {
-        const shares = new Decimal(userSharesAmounts[index].toString()).div(
-            1e6
-        );
-        const usd = shares
+        const usd = userSharesAmounts[index]
             .mul(currentUsdAmounts[index])
             .div(totalSharesAmounts[index]);
 
         return {
             pool,
-            usd,
-            shares,
+            usd: usd.isNaN() ? new Decimal(0) : usd,
+            shares: userSharesAmounts[index],
         };
     }).filter((p) => !p.usd.isZero());
 
