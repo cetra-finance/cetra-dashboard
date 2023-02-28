@@ -40,8 +40,14 @@ const Portfolio: FC = () => {
     });
     let currentUsdAmounts: Decimal[];
     if (isCurrentUsdSuccess && currentUsdAmountResults !== undefined) {
-        currentUsdAmounts = currentUsdAmountResults.map((value) => {
-            return new Decimal((value as BigNumber).toString()).div(1e6);
+        currentUsdAmounts = POOLS.map((pool, index) => {
+            const value = currentUsdAmountResults[index] as
+                | BigNumber
+                | undefined;
+
+            return value
+                ? new Decimal(value.toString()).div(1e6)
+                : new Decimal(0);
         });
     } else {
         currentUsdAmounts = POOLS.map(() => new Decimal(0));
@@ -67,8 +73,14 @@ const Portfolio: FC = () => {
     });
     let totalSharesAmounts: Decimal[];
     if (isTotalSharesSuccess && totalSharesAmountsResults !== undefined) {
-        totalSharesAmounts = totalSharesAmountsResults.map((value) => {
-            return new Decimal((value as BigNumber).toString()).div(1e6);
+        totalSharesAmounts = POOLS.map((pool, index) => {
+            const value = totalSharesAmountsResults[index] as
+                | BigNumber
+                | undefined;
+
+            return value
+                ? new Decimal(value.toString()).div(1e6)
+                : new Decimal(0);
         });
     } else {
         totalSharesAmounts = POOLS.map(() => new Decimal(0));
@@ -95,8 +107,14 @@ const Portfolio: FC = () => {
     });
     let userSharesAmounts: Decimal[];
     if (isUserSharesSuccess && userSharesAmountResults !== undefined) {
-        userSharesAmounts = userSharesAmountResults.map((value) => {
-            return new Decimal((value as BigNumber).toString()).div(1e6);
+        userSharesAmounts = POOLS.map((pool, index) => {
+            const value = userSharesAmountResults[index] as
+                | BigNumber
+                | undefined;
+
+            return value
+                ? new Decimal(value.toString()).div(1e6)
+                : new Decimal(0);
         });
     } else {
         userSharesAmounts = POOLS.map(() => new Decimal(0));

@@ -32,12 +32,19 @@ const Strategies: FC = () => {
     });
     let currentUsdAmounts: Decimal[];
     if (isCurrentUsdSuccess && currentUsdAmountResults !== undefined) {
-        currentUsdAmounts = currentUsdAmountResults.map((value) => {
-            return new Decimal((value as BigNumber).toString()).div(1e6);
+        currentUsdAmounts = POOLS.map((pool, index) => {
+            const value = currentUsdAmountResults[index] as
+                | BigNumber
+                | undefined;
+
+            return value
+                ? new Decimal(value.toString()).div(1e6)
+                : new Decimal(0);
         });
     } else {
         currentUsdAmounts = POOLS.map(() => new Decimal(0));
     }
+    console.log(`currentUsdAmounts: ${currentUsdAmounts}`);
 
     return (
         <Box w="full" minH="90%">
