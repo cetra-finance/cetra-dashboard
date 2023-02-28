@@ -128,6 +128,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
     } = useContractWrite(approveConfig);
 
     // Prepare mint(deposit) call
+    // TODO: Improve deposit availability checker
     const isDepositAvailable =
         isConnected &&
         (balanceData ? !balanceData.value.isZero() : false) &&
@@ -141,7 +142,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         abi: IChamberV1ABI,
         functionName: "mint",
         args: [denormalizedInputAmount],
-        enabled: isDepositAvailable,
+        enabled: isConnected,
     });
     const {
         data: depositData,
@@ -369,6 +370,8 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
               .div(currentUsdAmount)
               .mul(totalSharesAmount)
               .div(1e6);
+
+    // TODO: Improve withdraw availability checker
     const isWithdrawAvailable =
         isConnected &&
         !burnAmount.isZero() &&
@@ -384,7 +387,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         abi: IChamberV1ABI,
         functionName: "burn",
         args: [burnAmount],
-        enabled: isWithdrawAvailable,
+        enabled: isConnected,
     });
     const {
         data: withdrawData,
