@@ -1,7 +1,13 @@
 import { SimpleGrid, Box, Text } from "@chakra-ui/react";
 import { FC } from "react";
 
-const DEFAULT_TABS: string[] = ["Pool", "APY", "TVL", "Yield(APR)", "Strategy"];
+const DEFAULT_TABS: string[] = [
+    "Pool",
+    "APY",
+    "TVL",
+    "Yield (APR)",
+    "Strategy",
+];
 
 const P_SM: number = 0;
 const P_MD: number = 0;

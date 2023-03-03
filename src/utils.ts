@@ -17,6 +17,8 @@ export const DEFAULT_CHAINS =
 export const USDC_ADDRESS: Address =
     "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
 
+export const USDC_DEPOSIT_LIMIT = 10000;
+
 export function denormalizeAmount(amount: string, scale: number = 6): BN {
     const x = parseFloat(amount) * Math.pow(10, scale);
     return new BN(x);

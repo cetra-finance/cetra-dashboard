@@ -71,21 +71,43 @@ const Strategies: FC = () => {
                                 pool.address.toLowerCase()
                         );
 
-                        const apy = maybePoolStats
-                            ? new Decimal(maybePoolStats.baseApy).toFixed(3)
-                            : "0";
-                        const weeklyApr = maybePoolStats
-                            ? maybePoolStats.weeklyBasedApr === "calculating.."
-                                ? maybePoolStats.weeklyBasedApr
-                                : new Decimal(
-                                      maybePoolStats.weeklyBasedApr
-                                  ).toFixed(3)
-                            : "0";
-                        const dailyApr = maybePoolStats
-                            ? new Decimal(maybePoolStats.dailyBasedApr).toFixed(
-                                  3
-                              )
-                            : "0";
+                        let apy = "0%";
+                        if (maybePoolStats !== undefined) {
+                            if (maybePoolStats.baseApy === "calculating..") {
+                                apy = "calculating..";
+                            } else {
+                                apy = `${new Decimal(
+                                    maybePoolStats.baseApy
+                                ).toFixed(3)}%`;
+                            }
+                        }
+
+                        let weeklyApr = "0%";
+                        if (maybePoolStats !== undefined) {
+                            if (
+                                maybePoolStats.weeklyBasedApr ===
+                                "calculating.."
+                            ) {
+                                weeklyApr = "calculating..";
+                            } else {
+                                weeklyApr = `${new Decimal(
+                                    maybePoolStats.weeklyBasedApr
+                                ).toFixed(3)}%`;
+                            }
+                        }
+
+                        let dailyApr = "0%";
+                        if (maybePoolStats !== undefined) {
+                            if (
+                                maybePoolStats.dailyBasedApr === "calculating.."
+                            ) {
+                                dailyApr = "calculating..";
+                            } else {
+                                dailyApr = `${new Decimal(
+                                    maybePoolStats.dailyBasedApr
+                                ).toFixed(3)}%`;
+                            }
+                        }
 
                         return (
                             <CetraListItem
@@ -97,13 +119,13 @@ const Strategies: FC = () => {
                                 baseFarmName={pool.baseFarmName}
                                 quoteFarmIcon={pool.quoteFarmIcon}
                                 quoteFarmName={pool.quoteFarmName}
-                                apy={`${apy}%`}
+                                apy={`${apy}`}
                                 tvl={new Intl.NumberFormat("en-US", {
                                     style: "currency",
                                     currency: "USD",
                                 }).format(currentUsdAmounts[index].toNumber())}
-                                totalApr={`Total APR: ${weeklyApr}%`}
-                                dailyApr={`Daily APR: ${dailyApr}%`}
+                                totalApr={`Weekly APR: ${weeklyApr}`}
+                                dailyApr={`Daily APR: ${dailyApr}`}
                                 strategy={pool.strategy}
                                 actionText="Deposit"
                                 divider={index < POOLS.length - 1}

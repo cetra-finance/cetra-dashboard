@@ -145,12 +145,24 @@ const Portfolio: FC = () => {
                             pool.address.toLowerCase()
                     );
 
-                    const apy = maybePoolStats
-                        ? new Decimal(maybePoolStats.baseApy).toFixed(3)
-                        : "0";
-                    const earnMultiplier = maybePoolStats
-                        ? new Decimal(maybePoolStats.earnMultiplier)
-                        : new Decimal(0);
+                    let apy = "0%";
+                    if (maybePoolStats !== undefined) {
+                        if (maybePoolStats.baseApy === "calculating..") {
+                            apy = "calculating..";
+                        } else {
+                            apy = `${new Decimal(
+                                maybePoolStats.baseApy
+                            ).toFixed(3)}%`;
+                        }
+                    }
+
+                    let earnMultiplier = new Decimal(0);
+                    if (maybePoolStats !== undefined) {
+                        earnMultiplier = new Decimal(
+                            maybePoolStats.earnMultiplier
+                        );
+                    }
+
                     const farmedSinceYesterday = earnMultiplier
                         .mul(shares)
                         .toFixed(6);
@@ -165,7 +177,7 @@ const Portfolio: FC = () => {
                             baseFarmName={pool.baseFarmName}
                             quoteFarmIcon={pool.quoteFarmIcon}
                             quoteFarmName={pool.quoteFarmName}
-                            apy={`${apy}%`}
+                            apy={`${apy}`}
                             tvl={`$${usd.toFixed(6)}`}
                             totalApr="$--"
                             dailyApr={`${farmedSinceYesterday}$ Since Yesterday`}

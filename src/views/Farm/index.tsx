@@ -34,7 +34,11 @@ import CetraBuzzLogo from "../../assets/cetra-buzz.svg";
 import CetraMoneyBagLogo from "../../assets/cetra-money-bag.svg";
 import { CetraButton } from "../../components";
 import { Pool } from "../../pools";
-import { denormalizeAmount, USDC_ADDRESS } from "../../utils";
+import {
+    denormalizeAmount,
+    USDC_ADDRESS,
+    USDC_DEPOSIT_LIMIT,
+} from "../../utils";
 
 interface CardInfo {
     assetsInPool: string[];
@@ -509,6 +513,12 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
             : calcShareOfPool.mul(100).toFixed(3),
     };
 
+    const isExceedsDepositLimit =
+        normalizedInputAmount.toNumber() > USDC_DEPOSIT_LIMIT ||
+        normalizedInputAmount.toNumber() +
+            userSharesAmountUsdScaled.toNumber() >
+            USDC_DEPOSIT_LIMIT;
+
     return (
         <>
             <Modal
@@ -781,7 +791,9 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                         <Stack
                             direction="row"
                             border="1px"
-                            borderColor="#E8ECFD"
+                            borderColor={
+                                isExceedsDepositLimit ? "#F56565" : "#E8ECFD"
+                            }
                             borderRadius="7px"
                             alignItems="center"
                             pl="8px"
@@ -825,7 +837,11 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                         fontSize="22px"
                         fontWeight="bold"
                         h="45px"
-                        isDisabled={!isConnected || balance === "0.0"}
+                        isDisabled={
+                            !isConnected ||
+                            balance === "0.0" ||
+                            isExceedsDepositLimit
+                        }
                         isLoading={isDepositLoading}
                         onClick={() =>
                             isApproveAvailable
