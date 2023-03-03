@@ -1,6 +1,6 @@
-import BN from "bn.js";
 import { Chain, localhost, polygon } from "wagmi/chains";
 import { Address } from "wagmi";
+import { BigNumber } from "ethers";
 
 export const IS_PROD: boolean = import.meta.env.VITE_PROD === "true";
 
@@ -19,14 +19,12 @@ export const USDC_ADDRESS: Address =
 
 export const USDC_DEPOSIT_LIMIT = 10000;
 
-export function denormalizeAmount(amount: string, scale: number = 6): BN {
-    const x = parseFloat(amount) * Math.pow(10, scale);
-    return new BN(x);
-}
-
-export function normalizeAmount(amount: BN, scale: number = 6): string {
-    const x = amount.toNumber();
-    return (x / Math.pow(10, scale)).toString();
+export function denormalizeAmount(
+    amount: string,
+    scale: number = 6
+): BigNumber {
+    const x = Math.floor(parseFloat(amount) * Math.pow(10, scale));
+    return BigNumber.from(x);
 }
 
 export function getTruncatedAddress(

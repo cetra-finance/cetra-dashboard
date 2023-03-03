@@ -78,10 +78,8 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
     } = useDisclosure();
 
     const [inputAmount, setInputAmount] = useState("0.0");
-    const denormalizedInputAmount = BigNumber.from(
-        denormalizeAmount(
-            inputAmount.length === 0 ? "0.0" : inputAmount
-        ).toString()
+    const denormalizedInputAmount = denormalizeAmount(
+        inputAmount.length === 0 ? "0.0" : inputAmount
     );
 
     // Connect user wallet
