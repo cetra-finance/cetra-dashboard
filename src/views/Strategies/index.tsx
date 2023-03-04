@@ -9,6 +9,7 @@ import { CetraList, CetraListItem } from "../../components";
 import HandEmojiImg from "../../assets/hand-emoji.png";
 import Decimal from "decimal.js";
 import { usePoolsStats } from "../../hooks";
+import { USDC_DEPOSIT_LIMIT } from "../../utils";
 
 const Strategies: FC = () => {
     const navigate = useNavigate();
@@ -120,10 +121,15 @@ const Strategies: FC = () => {
                                 quoteFarmIcon={pool.quoteFarmIcon}
                                 quoteFarmName={pool.quoteFarmName}
                                 apy={`${apy}`}
-                                tvl={new Intl.NumberFormat("en-US", {
+                                tvl={`${new Intl.NumberFormat("en-US", {
                                     style: "currency",
                                     currency: "USD",
-                                }).format(currentUsdAmounts[index].toNumber())}
+                                }).format(
+                                    currentUsdAmounts[index].toNumber()
+                                )} / ${new Intl.NumberFormat("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                }).format(USDC_DEPOSIT_LIMIT)}`}
                                 totalApr={`Weekly APR: ${weeklyApr}`}
                                 dailyApr={`Daily APR: ${dailyApr}`}
                                 strategy={pool.strategy}
