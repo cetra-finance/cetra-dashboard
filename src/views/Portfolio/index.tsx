@@ -8,6 +8,7 @@ import IChamberV1ABI from "../../assets/abis/IChamberV1.json";
 import { Pool, POOLS } from "../../pools";
 import Decimal from "decimal.js";
 import { usePoolsStats } from "../../hooks";
+import { APYs } from "../../utils";
 
 interface UserPosition {
     pool: Pool;
@@ -136,7 +137,13 @@ const Portfolio: FC = () => {
     return (
         <Box w="full" minH="90%">
             <CetraList
-                tabs={["Pool", "APY", "Total Position", "Farmed", "Strategy"]}
+                tabs={[
+                    "Pool",
+                    "Projected APY",
+                    "Total Position",
+                    "Farmed",
+                    "Strategy",
+                ]}
             >
                 {userPositions.map(({ pool, usd, shares }, index) => {
                     const maybePoolStats = poolsStats.find(
@@ -145,6 +152,7 @@ const Portfolio: FC = () => {
                             pool.address.toLowerCase()
                     );
 
+                    let projectedApy = APYs[index];
                     let apy = "0%";
                     if (maybePoolStats !== undefined) {
                         if (maybePoolStats.baseApy === "calculating..") {
@@ -177,7 +185,7 @@ const Portfolio: FC = () => {
                             baseFarmName={pool.baseFarmName}
                             quoteFarmIcon={pool.quoteFarmIcon}
                             quoteFarmName={pool.quoteFarmName}
-                            apy={`${apy}`}
+                            apy={`${projectedApy}`}
                             tvl={`$${usd.toFixed(6)}`}
                             totalApr="$--"
                             dailyApr={`${farmedSinceYesterday}$ Since Yesterday`}
@@ -186,7 +194,7 @@ const Portfolio: FC = () => {
                             divider={index < userPositions.length - 1}
                             onAction={() =>
                                 navigate("/farm", {
-                                    state: { state: pool, apy },
+                                    state: { state: pool, apy, projectedApy },
                                 })
                             }
                         />

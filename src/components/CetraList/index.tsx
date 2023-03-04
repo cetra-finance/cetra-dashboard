@@ -3,7 +3,7 @@ import { FC } from "react";
 
 const DEFAULT_TABS: string[] = [
     "Pool",
-    "APY",
+    "Projected APY",
     "TVL",
     "Yield (APR)",
     "Strategy",

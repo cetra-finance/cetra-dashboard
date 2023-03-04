@@ -19,6 +19,9 @@ export const USDC_ADDRESS: Address =
 
 export const USDC_DEPOSIT_LIMIT = 10000;
 
+// TODO: Estimated version
+export const APYs = ["10.74%", "8.54%"];
+
 export function denormalizeAmount(
     amount: string,
     scale: number = 6

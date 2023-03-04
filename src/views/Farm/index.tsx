@@ -46,6 +46,7 @@ interface CardInfo {
     assetsSupplied: string;
     netExp: string;
     shareOfPool: string;
+    netApy: string;
 }
 
 interface FarmProps {
@@ -55,7 +56,11 @@ interface FarmProps {
 const Farm: FC<FarmProps> = ({ onLoaded }) => {
     const location = useLocation();
 
-    const { state, apy } = location.state as { state: Pool; apy: string };
+    const { state, apy, projectedApy } = location.state as {
+        state: Pool;
+        apy: string;
+        projectedApy: string;
+    };
     if (!state) {
         window.location.href = "/";
         return null;
@@ -284,7 +289,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         address: state.aavePool,
         abi: ILendingPoolABI,
         functionName: "getReserveNormalizedVariableDebt",
-        args: [aaveVtoken0],
+        args: [state.baseAssetAddress],
         watch: true,
         enabled: isConnected,
     });
@@ -302,7 +307,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         address: state.aavePool,
         abi: ILendingPoolABI,
         functionName: "getReserveNormalizedVariableDebt",
-        args: [aaveVtoken1],
+        args: [state.quoteAssetAddress],
         watch: true,
         enabled: isConnected,
     });
@@ -311,26 +316,16 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
             ? (quoteNormalizedVariableDebtResult as BigNumber)
             : BigNumber.from(0);
 
-    const aaveVtoken0ScaledBalanceScaled = new Decimal(
-        aaveVtoken0ScaledBalance.toString()
-    ).div(1e18);
-    const aaveVtoken1ScaledBalanceScaled = new Decimal(
-        aaveVtoken1ScaledBalance.toString()
-    ).div(1e18);
+    const x1 = new Decimal(baseNormalizedVariableDebt.toString());
+    const y1 = new Decimal(quoteNormalizedVariableDebt.toString());
+    const k1 = new Decimal(aaveVtoken0ScaledBalance.toString());
+    const j1 = new Decimal(aaveVtoken1ScaledBalance.toString());
 
-    const baseNormalizedVariableDebtScaled = new Decimal(
-        baseNormalizedVariableDebt.toString()
-    ).div(1e18);
-    const quoteNormalizedVariableDebtScaled = new Decimal(
-        quoteNormalizedVariableDebt.toString()
-    ).div(1e18);
+    const a = k1.mul(x1).div(1e27).div(1e18);
+    const b = j1.mul(y1).div(1e27).div(1e18);
 
-    const vWmaticTokenBalance = aaveVtoken0ScaledBalanceScaled
-        .mul(baseNormalizedVariableDebtScaled)
-        .mul(1e18);
-    const vWethTokenBalance = aaveVtoken1ScaledBalanceScaled
-        .mul(quoteNormalizedVariableDebtScaled)
-        .mul(1e18);
+    const vWmaticTokenBalance = a;
+    const vWethTokenBalance = b;
 
     // Get user shares amount
     const {
@@ -450,8 +445,8 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
     ];
 
     const calcAssetsBorrowed: Decimal[] = [
-        vWethTokenBalance.mul(calcShareOfPool),
         vWmaticTokenBalance.mul(calcShareOfPool),
+        vWethTokenBalance.mul(calcShareOfPool),
     ];
 
     const calcNetExp: Decimal[] = [
@@ -509,6 +504,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         shareOfPool: calcShareOfPool.mul(100).greaterThanOrEqualTo(100)
             ? ">=100"
             : calcShareOfPool.mul(100).toFixed(3),
+        netApy: apy,
     };
 
     const isExceedsDepositLimit =
@@ -704,7 +700,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                                 fontSize="20px"
                                 fontWeight="bold"
                             >
-                                APY: {apy}%
+                                Projected APY: {projectedApy}
                             </Text>
                             <Text
                                 color="#1F2040"
@@ -1097,6 +1093,28 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
                             fontWeight="medium"
                         >
                             {cardInfo.shareOfPool}%
+                        </Text>
+                    </Stack>
+                    <Stack
+                        direction="row"
+                        pb="3px"
+                        justifyContent="space-between"
+                    >
+                        <Text
+                            color="#1F2040"
+                            fontFamily="Chakra Petch"
+                            fontSize="18px"
+                            fontWeight="medium"
+                        >
+                            APY since inception:
+                        </Text>
+                        <Text
+                            color="#63637A"
+                            fontFamily="Chakra Petch"
+                            fontSize="18px"
+                            fontWeight="medium"
+                        >
+                            {cardInfo.netApy}
                         </Text>
                     </Stack>
                 </SimpleGrid>

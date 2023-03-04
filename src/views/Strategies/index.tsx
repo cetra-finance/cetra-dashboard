@@ -9,7 +9,7 @@ import { CetraList, CetraListItem } from "../../components";
 import HandEmojiImg from "../../assets/hand-emoji.png";
 import Decimal from "decimal.js";
 import { usePoolsStats } from "../../hooks";
-import { USDC_DEPOSIT_LIMIT } from "../../utils";
+import { USDC_DEPOSIT_LIMIT, APYs } from "../../utils";
 
 const Strategies: FC = () => {
     const navigate = useNavigate();
@@ -72,6 +72,7 @@ const Strategies: FC = () => {
                                 pool.address.toLowerCase()
                         );
 
+                        let projectedApy = APYs[index];
                         let apy = "0%";
                         if (maybePoolStats !== undefined) {
                             if (maybePoolStats.baseApy === "calculating..") {
@@ -120,7 +121,7 @@ const Strategies: FC = () => {
                                 baseFarmName={pool.baseFarmName}
                                 quoteFarmIcon={pool.quoteFarmIcon}
                                 quoteFarmName={pool.quoteFarmName}
-                                apy={`${apy}`}
+                                apy={`${projectedApy}`}
                                 tvl={`${new Intl.NumberFormat("en-US", {
                                     style: "currency",
                                     currency: "USD",
@@ -137,7 +138,11 @@ const Strategies: FC = () => {
                                 divider={index < POOLS.length - 1}
                                 onAction={() =>
                                     navigate("/farm", {
-                                        state: { state: pool, apy },
+                                        state: {
+                                            state: pool,
+                                            apy,
+                                            projectedApy,
+                                        },
                                     })
                                 }
                             />
