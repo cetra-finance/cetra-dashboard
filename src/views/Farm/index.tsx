@@ -36,8 +36,8 @@ import { CetraButton } from "../../components";
 import { Pool } from "../../pools";
 import {
     denormalizeAmount,
-    USDC_ADDRESS,
     USDC_DEPOSIT_LIMIT,
+    ZERO_ADDRESS,
 } from "../../utils";
 
 interface CardInfo {
@@ -92,8 +92,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
     // Obtain user USDC amount
     const { data: balanceData } = useBalance({
         address,
-        // TODO: Move deposit token address into state
-        token: USDC_ADDRESS,
+        token: state.depositAssetAddress,
         watch: true,
         enabled: isConnected,
     });
@@ -104,7 +103,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         isError: isUsdcAllowanceError,
         isLoading: isUsdcAllowanceLoading,
     } = useContractRead({
-        address: USDC_ADDRESS,
+        address: state.depositAssetAddress,
         abi: erc20ABI,
         functionName: "allowance",
         args: [address!, state.address],
@@ -119,7 +118,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
               usdcAllowanceAmount.lt(denormalizedInputAmount)
             : false;
     const { config: approveConfig } = usePrepareContractWrite({
-        address: USDC_ADDRESS,
+        address: state.depositAssetAddress,
         abi: erc20ABI,
         functionName: "approve",
         args: [state.address, ethers.constants.MaxUint256],
@@ -257,7 +256,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         functionName: "scaledBalanceOf",
         args: [state.address],
         watch: true,
-        enabled: isConnected,
+        enabled: isConnected && state.aavePool !== ZERO_ADDRESS,
     });
     const aaveVtoken0ScaledBalance: BigNumber = aaveVtoken0ScaledBalanceResult
         ? (aaveVtoken0ScaledBalanceResult as BigNumber)
@@ -274,7 +273,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         functionName: "scaledBalanceOf",
         args: [state.address],
         watch: true,
-        enabled: isConnected,
+        enabled: isConnected && state.aavePool !== ZERO_ADDRESS,
     });
     const aaveVtoken1ScaledBalance: BigNumber = aaveVtoken1ScaledBalanceResult
         ? (aaveVtoken1ScaledBalanceResult as BigNumber)
@@ -291,7 +290,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         functionName: "getReserveNormalizedVariableDebt",
         args: [state.baseAssetAddress],
         watch: true,
-        enabled: isConnected,
+        enabled: isConnected && state.aavePool !== ZERO_ADDRESS,
     });
     const baseNormalizedVariableDebt: BigNumber =
         baseNormalizedVariableDebtResult
@@ -309,7 +308,7 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         functionName: "getReserveNormalizedVariableDebt",
         args: [state.quoteAssetAddress],
         watch: true,
-        enabled: isConnected,
+        enabled: isConnected && state.aavePool !== ZERO_ADDRESS,
     });
     const quoteNormalizedVariableDebt: BigNumber =
         quoteNormalizedVariableDebtResult

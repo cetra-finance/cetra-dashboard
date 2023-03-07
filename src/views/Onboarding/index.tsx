@@ -11,6 +11,7 @@ import {
     ModalHeader,
     ModalBody,
     useDisclosure,
+    Button,
 } from "@chakra-ui/react";
 import { CetraButton } from "../../components";
 import GitHubLogo from "../../assets/github.svg";
@@ -148,8 +149,11 @@ const Onboarding: FC = () => {
                                 Book a call to see a demo or ask questions about
                                 Cetra.
                             </Text>
+
                             <CetraButton
                                 w="223px"
+                                asLink
+                                href="https://calendly.com/cetrafinance/15min-dev-talk"
                                 h="43px"
                                 borderRadius="0px"
                                 fontSize="20px"

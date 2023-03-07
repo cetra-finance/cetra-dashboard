@@ -31,6 +31,7 @@ import {
     CetraInfoCard,
     SidebarLink,
     CetraButton,
+    CetraNetworkSwitch,
 } from "./components";
 import { Strategies, Farm, Portfolio, Onboarding } from "./views";
 import { getTruncatedAddress, DEFAULT_CHAINS } from "./utils";
@@ -86,16 +87,18 @@ const App: FC = () => {
     const { disconnect } = useDisconnect();
 
     const { chain } = useNetwork();
-    // TODO: Add all supported chains
-    const chainId = DEFAULT_CHAINS[0].id;
     const {
         chains: switchNetworkChains,
         error: switchNetworkError,
         isLoading: isSwitchNetworkLoading,
         pendingChainId,
         switchNetwork,
-    } = useSwitchNetwork({ chainId });
-    const isSwitchNetworkNeeded = chain ? chain.id !== chainId : false;
+    } = useSwitchNetwork({ chainId: DEFAULT_CHAINS[0].id });
+    const isSwitchNetworkNeeded = chain
+        ? !DEFAULT_CHAINS.map((defaultChain) => defaultChain.id).includes(
+              chain.id
+          )
+        : false;
 
     return (
         <ChakraProvider>
@@ -132,8 +135,23 @@ const App: FC = () => {
                                     onClick={() => switchNetwork?.()}
                                     isLoading={isSwitchNetworkLoading}
                                 >
-                                    Switch Network
+                                    Switch to Optimism Network
                                 </CetraButton>
+                                {DEFAULT_CHAINS.length > 1 ? (
+                                    <CetraButton
+                                        h="8"
+                                        onClick={() =>
+                                            switchNetwork?.(
+                                                DEFAULT_CHAINS[1].id
+                                            )
+                                        }
+                                        isLoading={isSwitchNetworkLoading}
+                                    >
+                                        Switch to Polygon Network
+                                    </CetraButton>
+                                ) : (
+                                    <></>
+                                )}
                             </Stack>
                         </Stack>
                     </ModalBody>
@@ -205,30 +223,46 @@ const App: FC = () => {
                                 >
                                     {activePageTitle}
                                 </Text>
-                                <Button
-                                    isLoading={isLoading}
-                                    w="200px"
-                                    color="#7173FC"
-                                    fontFamily="Chakra Petch"
-                                    fontWeight="bold"
-                                    border="1px"
-                                    borderColor="#7173FC"
-                                    bgColor="transparent"
-                                    justifySelf="end"
-                                    onClick={() => {
-                                        if (!isConnected) {
-                                            connect({
-                                                connector: metaMaskConnector,
-                                            });
-                                        } else {
-                                            disconnect();
-                                        }
-                                    }}
-                                >
-                                    {isConnected
-                                        ? getTruncatedAddress(address!)
-                                        : "Connect Wallet"}
-                                </Button>
+                                <Stack direction="row" justify="end">
+                                    {isConnected &&
+                                    DEFAULT_CHAINS.length > 1 ? (
+                                        <CetraNetworkSwitch
+                                            isDisabled={isSwitchNetworkLoading}
+                                            onChange={(index) => {
+                                                switchNetwork?.(
+                                                    DEFAULT_CHAINS[index].id
+                                                );
+                                            }}
+                                        />
+                                    ) : (
+                                        <></>
+                                    )}
+                                    <Button
+                                        isLoading={isLoading}
+                                        w="200px"
+                                        color="#7173FC"
+                                        fontFamily="Chakra Petch"
+                                        fontWeight="bold"
+                                        border="1px"
+                                        borderColor="#7173FC"
+                                        bgColor="transparent"
+                                        justifySelf="end"
+                                        onClick={() => {
+                                            if (!isConnected) {
+                                                connect({
+                                                    connector:
+                                                        metaMaskConnector,
+                                                });
+                                            } else {
+                                                disconnect();
+                                            }
+                                        }}
+                                    >
+                                        {isConnected
+                                            ? getTruncatedAddress(address!)
+                                            : "Connect Wallet"}
+                                    </Button>
+                                </Stack>
                             </SimpleGrid>
                             <Box p={["0px", "0px", "8"]} overflowY="auto">
                                 <Routes>

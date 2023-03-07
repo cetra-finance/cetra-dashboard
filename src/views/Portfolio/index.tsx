@@ -5,10 +5,9 @@ import { BigNumber } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { CetraList, CetraListItem } from "../../components";
 import IChamberV1ABI from "../../assets/abis/IChamberV1.json";
-import { Pool, POOLS } from "../../pools";
+import { Pool } from "../../pools";
 import Decimal from "decimal.js";
-import { usePoolsStats } from "../../hooks";
-import { APYs } from "../../utils";
+import { useChainPoolsData } from "../../hooks";
 
 interface UserPosition {
     pool: Pool;
@@ -18,9 +17,12 @@ interface UserPosition {
 
 const Portfolio: FC = () => {
     const navigate = useNavigate();
-    const poolsStats = usePoolsStats();
-
     const { address, isConnected } = useAccount();
+    const chainPoolsData = useChainPoolsData();
+
+    const POOLS = chainPoolsData.pools;
+    const APYs = chainPoolsData.apys;
+    const poolsStats = chainPoolsData.stats;
 
     // Get current USD amount for all pools
     const {

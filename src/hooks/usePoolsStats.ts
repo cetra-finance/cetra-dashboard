@@ -13,8 +13,13 @@ interface PoolStats {
     earnMultiplier: string;
 }
 
-function usePoolsStats(): PoolStats[] {
-    const [stats, setStats] = useState<PoolStats[]>([]);
+interface Stats {
+    polygon: PoolStats[];
+    optimism: PoolStats[];
+}
+
+function usePoolsStats(): Stats | null {
+    const [stats, setStats] = useState<Stats | null>(null);
 
     useEffect(() => {
         let ignore = false;
@@ -38,4 +43,4 @@ function usePoolsStats(): PoolStats[] {
     return stats;
 }
 
-export { usePoolsStats, type PoolStats };
+export { usePoolsStats, type PoolStats, type Stats };

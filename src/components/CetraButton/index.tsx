@@ -16,6 +16,8 @@ interface CetraButtonProps {
     _active?: SystemStyleObject;
     isDisabled?: boolean;
     isLoading?: boolean;
+    asLink?: boolean;
+    href?: string;
     onClick?: () => void;
 }
 
@@ -34,6 +36,8 @@ const CetraButton: FC<CetraButtonProps> = ({
     _active,
     isDisabled,
     isLoading,
+    asLink,
+    href,
     onClick,
 }) => {
     const handleOnClick = useCallback(() => {
@@ -43,6 +47,9 @@ const CetraButton: FC<CetraButtonProps> = ({
     return (
         <Button
             bg={bgColor ?? "#7173FC"}
+            as={asLink ? "a" : undefined}
+            href={asLink ? href : undefined}
+            target={asLink ? "_blank" : undefined}
             color={color ?? "#FFFFFF"}
             fontFamily="Chakra Petch"
             fontWeight={fontWeight ?? "bold"}

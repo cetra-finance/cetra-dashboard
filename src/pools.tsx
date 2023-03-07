@@ -1,11 +1,17 @@
 import { Address } from "wagmi";
-import { USDC_ADDRESS } from "./utils";
+import {
+    POLYGON_USDC_ADDRESS,
+    OPTIMISM_USDC_ADDRESS,
+    ZERO_ADDRESS,
+} from "./utils";
 import AaveIcon from "./assets/icons/aave.svg";
+import SonneIcon from "./assets/icons/sonne.svg";
 import UniIcon from "./assets/icons/uni.svg";
 import MaticIcon from "./assets/icons/matic.svg";
 import UsdcIcon from "./assets/icons/usdc.svg";
 import EthIcon from "./assets/icons/eth.svg";
 import LinkIcon from "./assets/icons/link.svg";
+import SnxIcon from "./assets/icons/snx.svg";
 
 export interface Pool {
     name: string;
@@ -27,7 +33,7 @@ export interface Pool {
     aavePool: Address;
 }
 
-export const POOLS: Pool[] = [
+export const POLYGON_POOLS: Pool[] = [
     {
         name: "MATIC-LINK",
         baseAssetIcon: MaticIcon,
@@ -42,7 +48,7 @@ export const POOLS: Pool[] = [
         quoteFarmName: "UniV3",
         depositAssetIcon: UsdcIcon,
         depositAssetName: "USDC",
-        depositAssetAddress: USDC_ADDRESS,
+        depositAssetAddress: POLYGON_USDC_ADDRESS,
         strategy: "Delta-Neutral",
         address: "0x8E756cAad37136Df14Eb42Dc4BCb211D4aFC3E5B",
         aavePool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
@@ -77,9 +83,31 @@ export const POOLS: Pool[] = [
         quoteFarmName: "UniV3",
         depositAssetIcon: UsdcIcon,
         depositAssetName: "USDC",
-        depositAssetAddress: USDC_ADDRESS,
+        depositAssetAddress: POLYGON_USDC_ADDRESS,
         strategy: "Delta-Neutral",
         address: "0xaBFe2C02c1dbE04672de1e330b17288116945a67",
         aavePool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
+    },
+];
+
+export const OPTIMISM_POOLS: Pool[] = [
+    {
+        name: "ETH-SNX",
+        baseAssetIcon: EthIcon,
+        baseAssetName: "ETH",
+        baseAssetAddress: "0x4200000000000000000000000000000000000006",
+        quoteAssetIcon: SnxIcon,
+        quoteAssetName: "SNX",
+        quoteAssetAddress: "0x8700daec35af8ff88c16bdf0418774cb3d7599b4",
+        baseFarmIcon: SonneIcon,
+        baseFarmName: "Sonne",
+        quoteFarmIcon: UniIcon,
+        quoteFarmName: "UniV3",
+        depositAssetIcon: UsdcIcon,
+        depositAssetName: "USDC",
+        depositAssetAddress: OPTIMISM_USDC_ADDRESS,
+        strategy: "Delta-Neutral",
+        address: "0x4F46191bC4865813cbd2Ea583046BEa165b7Af8F",
+        aavePool: ZERO_ADDRESS,
     },
 ];
