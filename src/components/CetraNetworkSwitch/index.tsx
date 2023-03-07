@@ -1,5 +1,7 @@
 import { FC, useCallback, useState } from "react";
 import { Select } from "@chakra-ui/react";
+import { useNetwork } from "wagmi";
+import { DEFAULT_CHAINS } from "../../utils";
 
 interface CetraNetworkSwitchProps {
     fontWeight?: string;
@@ -18,13 +20,16 @@ const CetraNetworkSwitch: FC<CetraNetworkSwitchProps> = ({
     isDisabled,
     onChange,
 }) => {
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const { chain } = useNetwork();
+    const id = chain ? (DEFAULT_CHAINS[0].id === chain.id ? 0 : 1) : 0;
+
+    const [selectedIndex, setSelectedIndex] = useState(id);
 
     const handleOnChange = useCallback(
         (e: any) => {
             const index = e.target.selectedIndex;
-            setSelectedIndex(index);
             onChange?.(index);
+            setSelectedIndex(index);
         },
         [onChange]
     );
@@ -44,6 +49,7 @@ const CetraNetworkSwitch: FC<CetraNetworkSwitchProps> = ({
             _hover={{}}
             isDisabled={isDisabled}
             defaultValue={selectedIndex}
+            value={selectedIndex}
         >
             <option value="optimism">Optimism</option>
             <option value="polygon">Polygon</option>
