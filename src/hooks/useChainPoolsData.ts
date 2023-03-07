@@ -9,6 +9,7 @@ interface ChainPoolsData {
     apys: string[];
 }
 
+// TODO: Possible error if default network changed
 function useChainPoolsData(): ChainPoolsData {
     const { chain } = useNetwork();
     const poolsStatsData = usePoolsStats();

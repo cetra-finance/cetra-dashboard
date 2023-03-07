@@ -6,13 +6,36 @@ export const IS_PROD: boolean = import.meta.env.VITE_PROD === "true";
 
 export const API_GATEWAY_URL: string = "https://api-gateway-six.vercel.app/api";
 
-export const cetraDevLocalhost: Chain = {
+export const cetraOptimismFork: Chain = {
     ...localhost,
+    rpcUrls: {
+        default: {
+            http: ["http://127.0.0.1:8546/"],
+        },
+        public: {
+            http: ["http://127.0.0.1:8546/"],
+        },
+    },
+    id: 31338,
+};
+
+export const cetraPolygonFork: Chain = {
+    ...localhost,
+    rpcUrls: {
+        default: {
+            http: ["http://127.0.0.1:8545/"],
+        },
+        public: {
+            http: ["http://127.0.0.1:8545/"],
+        },
+    },
     id: 31337,
 };
 
 export const DEFAULT_CHAINS =
-    IS_PROD === true ? [optimism, polygon] : [cetraDevLocalhost];
+    IS_PROD === true
+        ? [optimism, polygon]
+        : [cetraOptimismFork, cetraPolygonFork];
 
 export const OPTIMISM_USDC_ADDRESS: Address =
     "0x7f5c764cbc14f9669b88837ca1490cca17c31607";

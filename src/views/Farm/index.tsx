@@ -39,6 +39,7 @@ import {
     USDC_DEPOSIT_LIMIT,
     ZERO_ADDRESS,
 } from "../../utils";
+import { useChainPoolsData } from "../../hooks";
 
 interface CardInfo {
     assetsInPool: string[];
@@ -62,6 +63,16 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         projectedApy: string;
     };
     if (!state) {
+        window.location.href = "/";
+        return null;
+    }
+
+    const poolsData = useChainPoolsData();
+    if (
+        !poolsData.pools
+            .map((pool) => pool.address.toLowerCase())
+            .includes(state.address.toLowerCase())
+    ) {
         window.location.href = "/";
         return null;
     }
