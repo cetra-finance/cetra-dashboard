@@ -34,8 +34,8 @@ export const cetraPolygonFork: Chain = {
 
 export const DEFAULT_CHAINS =
     IS_PROD === true
-        ? [optimism, polygon]
-        : [cetraOptimismFork, cetraPolygonFork];
+        ? [polygon, optimism]
+        : [cetraPolygonFork, cetraOptimismFork];
 
 export const OPTIMISM_USDC_ADDRESS: Address =
     "0x7f5c764cbc14f9669b88837ca1490cca17c31607";

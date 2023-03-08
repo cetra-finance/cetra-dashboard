@@ -135,7 +135,8 @@ const App: FC = () => {
                                     onClick={() => switchNetwork?.()}
                                     isLoading={isSwitchNetworkLoading}
                                 >
-                                    Switch to Optimism Network
+                                    {/* TODO: Possible error if default network changed */}
+                                    Switch to Polygon Network
                                 </CetraButton>
                                 {DEFAULT_CHAINS.length > 1 ? (
                                     <CetraButton
@@ -147,7 +148,8 @@ const App: FC = () => {
                                         }
                                         isLoading={isSwitchNetworkLoading}
                                     >
-                                        Switch to Polygon Network
+                                        {/* TODO: Possible error if default network changed */}
+                                        Switch to Optimism Network
                                     </CetraButton>
                                 ) : (
                                     <></>

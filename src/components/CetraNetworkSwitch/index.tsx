@@ -35,20 +35,22 @@ const CetraNetworkSwitch: FC<CetraNetworkSwitchProps> = ({
     return (
         <Select
             bg={bgColor ?? "transparent"}
-            color={id === 1 ? "#8247E5" : "#FF4545"}
+            // TODO: Index. Possible error if default network changed
+            color={id === 0 ? "#8247E5" : "#FF4545"}
             fontFamily="Chakra Petch"
             fontWeight={fontWeight ?? "bold"}
             fontSize={fontSize ?? ["12px", "12px", "16px"]}
             w={w ?? "200px"}
             onChange={handleOnChange}
-            border={id === 1 ? "1px solid #8247E5" : "1px solid #FF4545"}
+            // TODO: Index. Possible error if default network changed
+            border={id === 0 ? "1px solid #8247E5" : "1px solid #FF4545"}
             _hover={{}}
             isDisabled={isDisabled}
-            // TODO: Possible error if default network changed
-            value={id === 1 ? "polygon" : "optimism"}
+            // TODO: Index. Possible error if default network changed
+            value={id === 0 ? "polygon" : "optimism"}
         >
-            <option value="optimism">Optimism</option>
             <option value="polygon">Polygon</option>
+            <option value="optimism">Optimism</option>
         </Select>
     );
 };

@@ -20,14 +20,15 @@ function useChainPoolsData(): ChainPoolsData {
             : chain.id === DEFAULT_CHAINS[0].id
         : true;
 
+    // TODO: Possible error if default network changed
     const stats: PoolStats[] = poolsStatsData
         ? isDefaultChain
-            ? poolsStatsData.optimism
-            : poolsStatsData.polygon
+            ? poolsStatsData.polygon
+            : poolsStatsData.optimism
         : [];
 
-    const pools = isDefaultChain ? OPTIMISM_POOLS : POLYGON_POOLS;
-    const apys = isDefaultChain ? OPTIMISM_APYs : POLYGON_APYs;
+    const pools = isDefaultChain ? POLYGON_POOLS : OPTIMISM_POOLS;
+    const apys = isDefaultChain ? POLYGON_APYs : OPTIMISM_APYs;
 
     return {
         pools,
