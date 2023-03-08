@@ -9,16 +9,16 @@ interface ChainPoolsData {
     apys: string[];
 }
 
-// TODO: Possible error if default network changed
 function useChainPoolsData(): ChainPoolsData {
     const { chain } = useNetwork();
     const poolsStatsData = usePoolsStats();
 
-    const isDefaultChain = chain
-        ? DEFAULT_CHAINS.length === 1
-            ? true
-            : chain.id === DEFAULT_CHAINS[0].id
-        : true;
+    let isDefaultChain = true;
+    if (chain) {
+        if (DEFAULT_CHAINS.map((chain) => chain.id).includes(chain.id)) {
+            isDefaultChain = DEFAULT_CHAINS[0].id === chain.id;
+        }
+    }
 
     // TODO: Possible error if default network changed
     const stats: PoolStats[] = poolsStatsData
@@ -27,6 +27,7 @@ function useChainPoolsData(): ChainPoolsData {
             : poolsStatsData.optimism
         : [];
 
+    // TODO: Possible error if default network changed
     const pools = isDefaultChain ? POLYGON_POOLS : OPTIMISM_POOLS;
     const apys = isDefaultChain ? POLYGON_APYs : OPTIMISM_APYs;
 

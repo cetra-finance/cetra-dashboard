@@ -22,7 +22,17 @@ const CetraNetworkSwitch: FC<CetraNetworkSwitchProps> = ({
 }) => {
     const { chain } = useNetwork();
     // TODO: Possible error if default network changed
-    const id: number = chain ? (DEFAULT_CHAINS[0].id === chain.id ? 0 : 1) : 0;
+    let id = 0;
+    if (chain) {
+        if (DEFAULT_CHAINS.map((chain) => chain.id).includes(chain.id)) {
+            const resultId = DEFAULT_CHAINS.findIndex(
+                ({ id }) => id === chain.id
+            );
+            if (resultId !== -1) {
+                id = resultId;
+            }
+        }
+    }
 
     const handleOnChange = useCallback(
         (e: any) => {
