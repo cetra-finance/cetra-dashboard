@@ -12,6 +12,25 @@ interface CetraNetworkSwitchProps {
     onChange?: (index: number) => void;
 }
 
+// TODO: Support more networks
+const CHAIN_STYLES = [
+    {
+        value: "polygon",
+        color: "#8247E5",
+        border: "1px solid #8247E5",
+    },
+    {
+        value: "optimism",
+        color: "#FF4545",
+        border: "1px solid #FF4545",
+    },
+    {
+        value: "arbitrum",
+        color: "#16273E",
+        border: "1px solid #16273E",
+    },
+];
+
 const CetraNetworkSwitch: FC<CetraNetworkSwitchProps> = ({
     fontWeight,
     fontSize,
@@ -21,7 +40,7 @@ const CetraNetworkSwitch: FC<CetraNetworkSwitchProps> = ({
     onChange,
 }) => {
     const { chain } = useNetwork();
-    // TODO: Possible error if default network changed
+
     let id = 0;
     if (chain) {
         if (DEFAULT_CHAINS.map((chain) => chain.id).includes(chain.id)) {
@@ -42,25 +61,24 @@ const CetraNetworkSwitch: FC<CetraNetworkSwitchProps> = ({
         [onChange]
     );
 
+    // TODO: Support more networks
     return (
         <Select
             bg={bgColor ?? "transparent"}
-            // TODO: Index. Possible error if default network changed
-            color={id === 0 ? "#8247E5" : "#FF4545"}
+            color={CHAIN_STYLES[id].color}
             fontFamily="Chakra Petch"
             fontWeight={fontWeight ?? "bold"}
             fontSize={fontSize ?? ["12px", "12px", "16px"]}
             w={w ?? "200px"}
             onChange={handleOnChange}
-            // TODO: Index. Possible error if default network changed
-            border={id === 0 ? "1px solid #8247E5" : "1px solid #FF4545"}
+            border={CHAIN_STYLES[id].border}
             _hover={{}}
             isDisabled={isDisabled}
-            // TODO: Index. Possible error if default network changed
-            value={id === 0 ? "polygon" : "optimism"}
+            value={CHAIN_STYLES[id].value}
         >
             <option value="polygon">Polygon</option>
             <option value="optimism">Optimism</option>
+            <option value="arbitrum">Arbitrum</option>
         </Select>
     );
 };

@@ -138,22 +138,26 @@ const App: FC = () => {
                                     {/* TODO: Possible error if default network changed */}
                                     Switch to Polygon Network
                                 </CetraButton>
-                                {DEFAULT_CHAINS.length > 1 ? (
-                                    <CetraButton
-                                        h="8"
-                                        onClick={() =>
-                                            switchNetwork?.(
-                                                DEFAULT_CHAINS[1].id
-                                            )
-                                        }
-                                        isLoading={isSwitchNetworkLoading}
-                                    >
-                                        {/* TODO: Possible error if default network changed */}
-                                        Switch to Optimism Network
-                                    </CetraButton>
-                                ) : (
-                                    <></>
-                                )}
+                                <CetraButton
+                                    h="8"
+                                    onClick={() =>
+                                        switchNetwork?.(DEFAULT_CHAINS[1].id)
+                                    }
+                                    isLoading={isSwitchNetworkLoading}
+                                >
+                                    {/* TODO: Possible error if default network changed */}
+                                    Switch to Optimism Network
+                                </CetraButton>
+                                <CetraButton
+                                    h="8"
+                                    onClick={() =>
+                                        switchNetwork?.(DEFAULT_CHAINS[2].id)
+                                    }
+                                    isLoading={isSwitchNetworkLoading}
+                                >
+                                    {/* TODO: Possible error if default network changed */}
+                                    Switch to Arbitrum Network
+                                </CetraButton>
                             </Stack>
                         </Stack>
                     </ModalBody>

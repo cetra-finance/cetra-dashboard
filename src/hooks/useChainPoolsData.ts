@@ -1,7 +1,12 @@
 import { useNetwork } from "wagmi";
 import { usePoolsStats, PoolStats } from "./usePoolsStats";
-import { Pool, POLYGON_POOLS, OPTIMISM_POOLS } from "../pools";
-import { DEFAULT_CHAINS, POLYGON_APYs, OPTIMISM_APYs } from "../utils";
+import { Pool, POLYGON_POOLS, OPTIMISM_POOLS, ARBITRUM_POOLS } from "../pools";
+import {
+    DEFAULT_CHAINS,
+    POLYGON_APYs,
+    OPTIMISM_APYs,
+    ARBITRUM_APYs,
+} from "../utils";
 
 interface ChainPoolsData {
     pools: Pool[];
@@ -13,23 +18,37 @@ function useChainPoolsData(): ChainPoolsData {
     const { chain } = useNetwork();
     const poolsStatsData = usePoolsStats();
 
-    let isDefaultChain = true;
+    // 1. Check chain connection
+    // 2. If there are no connection, then return polygon data
+    // 3. If there are connection, then check if network is supported, otherwise return polygon data
+
+    // TODO: Move default params
+    let pools = POLYGON_POOLS;
+    let apys = POLYGON_APYs;
+    let stats = poolsStatsData ? poolsStatsData.polygon : [];
+
     if (chain) {
-        if (DEFAULT_CHAINS.map((chain) => chain.id).includes(chain.id)) {
-            isDefaultChain = DEFAULT_CHAINS[0].id === chain.id;
+        for (const supportedChain of DEFAULT_CHAINS) {
+            if (chain.id === supportedChain.id) {
+                // TODO: Support more networks
+                if (supportedChain.network.includes("arbitrum")) {
+                    pools = ARBITRUM_POOLS;
+                    apys = ARBITRUM_APYs;
+                    stats = poolsStatsData ? poolsStatsData.arbitrum : [];
+                } else if (supportedChain.network.includes("matic")) {
+                    pools = POLYGON_POOLS;
+                    apys = POLYGON_APYs;
+                    stats = poolsStatsData ? poolsStatsData.polygon : [];
+                } else if (supportedChain.network.includes("optimism")) {
+                    pools = OPTIMISM_POOLS;
+                    apys = OPTIMISM_APYs;
+                    stats = poolsStatsData ? poolsStatsData.optimism : [];
+                }
+
+                break;
+            }
         }
     }
-
-    // TODO: Possible error if default network changed
-    const stats: PoolStats[] = poolsStatsData
-        ? isDefaultChain
-            ? poolsStatsData.polygon
-            : poolsStatsData.optimism
-        : [];
-
-    // TODO: Possible error if default network changed
-    const pools = isDefaultChain ? POLYGON_POOLS : OPTIMISM_POOLS;
-    const apys = isDefaultChain ? POLYGON_APYs : OPTIMISM_APYs;
 
     return {
         pools,

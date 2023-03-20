@@ -2,6 +2,7 @@ import { Address } from "wagmi";
 import {
     POLYGON_USDC_ADDRESS,
     OPTIMISM_USDC_ADDRESS,
+    ARBITRUM_USDC_ADDRESS,
     ZERO_ADDRESS,
 } from "./utils";
 import AaveIcon from "./assets/icons/aave.svg";
@@ -109,5 +110,27 @@ export const OPTIMISM_POOLS: Pool[] = [
         strategy: "Delta-Neutral",
         address: "0x4F46191bC4865813cbd2Ea583046BEa165b7Af8F",
         aavePool: ZERO_ADDRESS,
+    },
+];
+
+export const ARBITRUM_POOLS: Pool[] = [
+    {
+        name: "ETH-USDC",
+        baseAssetIcon: EthIcon,
+        baseAssetName: "ETH",
+        baseAssetAddress: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+        quoteAssetIcon: UsdcIcon,
+        quoteAssetName: "USDC",
+        quoteAssetAddress: ARBITRUM_USDC_ADDRESS,
+        baseFarmIcon: AaveIcon,
+        baseFarmName: "AAVE",
+        quoteFarmIcon: UniIcon,
+        quoteFarmName: "UniV3",
+        depositAssetIcon: UsdcIcon,
+        depositAssetName: "USDC",
+        depositAssetAddress: ARBITRUM_USDC_ADDRESS,
+        strategy: "Delta-Neutral",
+        address: "0x93e3B2E1E3837622156FEcdC6e5472AF31fE10Bb",
+        aavePool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
     },
 ];

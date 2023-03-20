@@ -23,7 +23,7 @@ import {
     useContractRead,
     Address,
 } from "wagmi";
-import { erc20ABI } from "wagmi";
+import { erc20ABI, useNetwork } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 import { useLocation } from "react-router-dom";
 import Decimal from "decimal.js";
@@ -38,6 +38,7 @@ import {
     denormalizeAmount,
     USDC_DEPOSIT_LIMIT,
     ZERO_ADDRESS,
+    DEFAULT_CHAINS,
 } from "../../utils";
 import { useChainPoolsData } from "../../hooks";
 
@@ -76,6 +77,8 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         window.location.href = "/";
         return null;
     }
+
+    const { chain } = useNetwork();
 
     useEffect(() => {
         onLoaded?.(state.name);
@@ -238,7 +241,9 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         abi: IChamberV1ABI,
         functionName: "get_i_aaveVToken0",
         watch: true,
-        enabled: isConnected,
+        // TODO: Fix arbitrum interface issue
+        enabled:
+            isConnected && (chain ? chain.id !== DEFAULT_CHAINS[2].id : true),
     });
     const aaveVtoken0: Address = aaveVtoken0Result as Address;
 
@@ -252,7 +257,9 @@ const Farm: FC<FarmProps> = ({ onLoaded }) => {
         abi: IChamberV1ABI,
         functionName: "get_i_aaveVToken1",
         watch: true,
-        enabled: isConnected,
+        // TODO: Fix arbitrum interface issue
+        enabled:
+            isConnected && (chain ? chain.id !== DEFAULT_CHAINS[2].id : true),
     });
     const aaveVtoken1: Address = aaveVtoken1Result as Address;
 

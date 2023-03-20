@@ -13,9 +13,11 @@ interface PoolStats {
     earnMultiplier: string;
 }
 
+// TODO: Support more networks
 interface Stats {
     polygon: PoolStats[];
     optimism: PoolStats[];
+    arbitrum: PoolStats[];
 }
 
 function usePoolsStats(): Stats | null {

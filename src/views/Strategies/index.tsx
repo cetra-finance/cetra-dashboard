@@ -139,6 +139,7 @@ const Strategies: FC = () => {
                                 strategy={pool.strategy}
                                 actionText="Deposit"
                                 divider={index < POOLS.length - 1}
+                                isActionLoading={apy === "0%"}
                                 onAction={() =>
                                     navigate("/farm", {
                                         state: {

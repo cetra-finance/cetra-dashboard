@@ -194,6 +194,7 @@ const Portfolio: FC = () => {
                             strategy={pool.strategy}
                             actionText="Manage"
                             divider={index < userPositions.length - 1}
+                            isActionLoading={apy === "0%"}
                             onAction={() =>
                                 navigate("/farm", {
                                     state: { state: pool, apy, projectedApy },

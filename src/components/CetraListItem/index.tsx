@@ -21,6 +21,7 @@ interface CetraListItemProps {
     strategy: string;
     actionText: string;
     divider: boolean;
+    isActionLoading?: boolean;
     onAction?: () => void;
 }
 
@@ -39,6 +40,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
     strategy,
     actionText,
     divider,
+    isActionLoading,
     onAction,
 }) => {
     return (
@@ -201,6 +203,7 @@ const CetraListItem: FC<CetraListItemProps> = ({
             <CetraButton
                 w="80%"
                 h="32px"
+                isLoading={isActionLoading}
                 onClick={() => {
                     if (onAction) onAction();
                 }}
